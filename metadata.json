@@ -1,0 +1,7 @@
+{
+  "name": "CONECTA Consultores",
+  "description": "Consultora líder en impacto social, fortalecimiento organizacional y metodología HPO en Bolivia.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
