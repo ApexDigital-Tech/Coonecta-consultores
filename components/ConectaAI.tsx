@@ -51,8 +51,9 @@ const ConectaAI: React.FC = () => {
                 // 🔄 Trigger refresh in other components (like AdminDashboard)
                 window.dispatchEvent(new CustomEvent('appointment-saved'));
             }
-        } catch (error) {
-            alert("Error al registrar la cita. Por favor, intente de nuevo.");
+        } catch (error: any) {
+            console.error("Booking error:", error);
+            alert(`Error: ${error.message || "No se pudo registrar la cita. Verifique su conexión."}`);
         } finally {
             setIsSaving(false);
         }
@@ -61,9 +62,9 @@ const ConectaAI: React.FC = () => {
     return (
         <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end gap-6">
 
-            {/* PANEL DE AGENDAMIENTO ELITE */}
+            {/* PANEL DE AGENDAMIENTO ELITE - ULTRA COMPACTO */}
             {isOpen && (
-                <div className="w-[360px] max-h-[80vh] bg-[#0f172a] rounded-[2.5rem] shadow-[0_50px_100px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col overflow-hidden animate-in zoom-in-95 duration-500">
+                <div className="w-[320px] max-h-[75vh] bg-[#0f172a] rounded-[2rem] shadow-[0_40px_80px_rgba(0,0,0,0.8)] border border-white/10 flex flex-col overflow-hidden animate-in zoom-in-95 duration-500">
                     <div className="p-8 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-primary/20 to-transparent">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#D4AF37] to-primary p-0.5 shadow-xl">
@@ -103,7 +104,7 @@ const ConectaAI: React.FC = () => {
                                 </div>
                                 <button
                                     onClick={handleStartBooking}
-                                    className="w-full bg-[#D4AF37] text-white py-6 rounded-2xl font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all text-sm italic shadow-accent/20"
+                                    className="w-full bg-[#D4AF37] text-white py-4 rounded-xl font-black uppercase tracking-[0.2em] shadow-xl hover:scale-[1.02] active:scale-95 transition-all text-xs italic"
                                 >
                                     Agendar Cita Ahora
                                 </button>
@@ -178,9 +179,9 @@ const ConectaAI: React.FC = () => {
                                 <button
                                     disabled={isSaving}
                                     type="submit"
-                                    className="w-full bg-primary text-white py-6 rounded-2xl font-black uppercase tracking-[0.2em] shadow-2xl hover:bg-blue-900 transition-all text-sm italic flex items-center justify-center gap-3"
+                                    className="w-full bg-primary text-white py-4 rounded-xl font-black uppercase tracking-[0.2em] shadow-xl hover:bg-blue-900 transition-all text-xs italic flex items-center justify-center gap-3"
                                 >
-                                    {isSaving ? <Loader2 className="animate-spin" size={20} /> : 'CONFIRMAR AGENDAMIENTO'}
+                                    {isSaving ? <Loader2 className="animate-spin" size={16} /> : 'CONFIRMAR AGENDAMIENTO'}
                                 </button>
                             </form>
                         )}
@@ -208,14 +209,14 @@ const ConectaAI: React.FC = () => {
                 </div>
             )}
 
-            {/* BOTÓN MAESTRO (EL ORBE DORADO) - Redimensionado */}
+            {/* BOTÓN MAESTRO (EL ORBE DORADO) - ULTRA DISCRETO */}
             <button
                 onClick={handleOpen}
-                className={`w-24 h-24 rounded-full shadow-[0_30px_80px_-10px_rgba(212,175,55,0.6)] flex flex-col items-center justify-center transition-all duration-500 hover:scale-110 active:scale-90 border-[8px] border-[#0a0f1d] bg-[#D4AF37] text-white group relative`}
+                className={`w-16 h-16 rounded-full shadow-[0_20px_50px_-10px_rgba(212,175,55,0.6)] flex flex-col items-center justify-center transition-all duration-500 hover:scale-110 active:scale-90 border-[6px] border-[#0a0f1d] bg-[#D4AF37] text-white group relative`}
             >
                 <div className="absolute inset-0 rounded-full bg-[#D4AF37] opacity-20 group-hover:animate-ping"></div>
-                <Calendar size={32} className="drop-shadow-2xl group-hover:rotate-12 transition-transform" />
-                <span className="text-[8px] font-black uppercase tracking-[0.2em] mt-1 drop-shadow-md">Agendar</span>
+                <Calendar size={24} className="drop-shadow-2xl group-hover:rotate-12 transition-transform" />
+                <span className="text-[6px] font-black uppercase tracking-[0.1em] mt-0.5 drop-shadow-md">CITA</span>
             </button>
         </div>
     );
