@@ -107,7 +107,7 @@ const App = () => {
 
   return (
     <div className="font-sans antialiased text-dark bg-gray-50">
-      <ConectaAI />
+      {view !== 'admin' && <ConectaAI />}
 
       {/* Navigation */}
       <nav className="fixed w-full z-40 bg-white/70 backdrop-blur-xl border-b border-white/20 transition-all duration-300">

@@ -51,7 +51,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
     const handleManualSave = async (appt: AppointmentData) => {
         const success = await saveAppointment(appt);
-        if (success) refreshData();
+        if (success) {
+            await refreshData();
+            return true;
+        }
+        return false;
     };
 
     return (

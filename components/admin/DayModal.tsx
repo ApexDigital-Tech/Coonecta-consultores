@@ -31,28 +31,21 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
         const targetYear = month.getFullYear();
         const targetMonth = month.getMonth();
         const targetDay = day;
-        const targetHour = parseInt(time.split(':')[0], 10);
+        const [targetH] = time.split(':').map(n => parseInt(n, 10));
 
         return appointments.find(a => {
             if (a.status === 'closed' || !a.preferredDateTime) return false;
 
-            // Caso 1: Match por String (Chatbot Victoria e ISO)
-            // Victoria guarda: 2026-02-11T09:00
-            // Manual guarda: 2026-02-11 09:00
-            const dateStr = `${targetYear}-${String(targetMonth + 1).padStart(2, '0')}-${String(targetDay).padStart(2, '0')}`;
-            const timeStr = time; // "09:00"
-            const norm = a.preferredDateTime.replace('T', ' ');
-
-            if (norm.includes(dateStr) && norm.includes(timeStr)) return true;
-
-            // Caso 2: Match por Objeto Date
             const d = new Date(a.preferredDateTime);
-            if (!isNaN(d.getTime())) {
-                const sameDay = d.getFullYear() === targetYear && d.getMonth() === targetMonth && d.getDate() === targetDay;
-                if (sameDay && d.getHours() === targetHour) return true;
-            }
+            if (isNaN(d.getTime())) return false;
 
-            return false;
+            // Comparar en tiempo local del navegador para que coincida con lo que el admin ve
+            const isMatch = d.getFullYear() === targetYear &&
+                d.getMonth() === targetMonth &&
+                d.getDate() === targetDay &&
+                d.getHours() === targetH;
+
+            return isMatch;
         });
     };
 
@@ -61,10 +54,12 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
         if (!selectedSlot) return;
         setIsSubmitting(true);
         try {
-            // Formato normalizado: YYYY-MM-DD HH:mm
-            const dateTimeString = `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')} ${selectedSlot}`;
+            // Formato normalizado: YYYY-MM-DDTHH:mm:ss para parseo robusto
+            const monthStr = String(month.getMonth() + 1).padStart(2, '0');
+            const dayStr = String(day).padStart(2, '0');
+            const dateTimeString = `${month.getFullYear()}-${monthStr}-${dayStr}T${selectedSlot}:00`;
 
-            await onSaveAppointment({
+            const success = await onSaveAppointment({
                 ...formData as AppointmentData,
                 preferredDateTime: dateTimeString,
                 phone: formData.phone || '',
@@ -72,17 +67,19 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
                 status: 'scheduled'
             });
 
-            setSelectedSlot(null);
-            setFormData({
-                clientName: '',
-                email: '',
-                organization: '',
-                needType: 'Diagnóstico Organizacional HPO',
-                topic: '',
-                notes: 'Agendado manualmente por Admin'
-            });
+            if (success) {
+                setSelectedSlot(null);
+                setFormData({
+                    clientName: '',
+                    email: '',
+                    organization: '',
+                    needType: 'Diagnóstico Organizacional HPO',
+                    topic: '',
+                    notes: 'Agendado manualmente por Admin'
+                });
+            }
         } catch (error) {
-            alert("Error al agendar.");
+            alert("Error al agendar. Verifique su conexión.");
         } finally {
             setIsSubmitting(false);
         }
@@ -97,8 +94,8 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
                 <div
                     onClick={() => !appt && setSelectedSlot(isSelected ? null : time)}
                     className={`p-3 rounded-xl border min-h-[60px] flex items-center transition-all cursor-pointer ${appt ? 'bg-primary/20 border-primary/30' :
-                            isSelected ? 'bg-accent/30 border-accent/60 shadow-[0_0_20px_rgba(212,175,55,0.2)]' :
-                                'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'
+                        isSelected ? 'bg-accent/30 border-accent/60 shadow-[0_0_20px_rgba(212,175,55,0.2)]' :
+                            'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'
                         }`}
                 >
                     <div className="w-14 flex items-center justify-center border-r border-white/10 mr-4 font-black text-white/30 text-xs italic leading-none">{time}</div>

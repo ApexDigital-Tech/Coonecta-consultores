@@ -23,6 +23,10 @@ const saveLocalBackup = (appt: AppointmentData) => {
 
 export const saveAppointment = async (data: AppointmentData): Promise<AppointmentData | null> => {
   try {
+    // Convertir a ISO garantizando que se interprete correctamente el tiempo local
+    const dateObj = new Date(data.preferredDateTime);
+    const isoString = isNaN(dateObj.getTime()) ? null : dateObj.toISOString();
+
     // Intentar guardar en Supabase via RPC
     const { data: dbId, error } = await supabase.rpc('create_public_appointment', {
       p_client_name: data.clientName,
@@ -31,7 +35,7 @@ export const saveAppointment = async (data: AppointmentData): Promise<Appointmen
       p_organization: data.organization || null,
       p_need_type: data.needType || null,
       p_topic: data.topic || null,
-      p_preferred_date_time: data.preferredDateTime ? new Date(data.preferredDateTime).toISOString() : null,
+      p_preferred_date_time: isoString,
       p_consultant: data.consultant || 'Victoria AI',
       p_notes: data.notes || null,
     });
