@@ -7,7 +7,7 @@ import LoginForm from './components/auth/LoginForm';
 import { useAuth } from './hooks/useAuth';
 import { SERVICES, CASES, FAQS, NAV_LINKS } from './constants';
 import { TEAM } from './TEAM';
-import { Menu, X, CheckCircle, ChevronDown, ChevronUp, Facebook, Linkedin, Youtube, Mail, MapPin, Phone, Puzzle, TrendingDown, ShieldAlert, Lock, Loader2 } from 'lucide-react';
+import { Menu, X, CheckCircle, ChevronDown, ChevronUp, Facebook, Linkedin, Youtube, Mail, MapPin, Phone, Puzzle, TrendingDown, ShieldAlert, Lock, Loader2, Instagram, Twitter } from 'lucide-react';
 
 const App = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -119,7 +119,7 @@ const App = () => {
                   <img
                     src="/conecta-logo.png"
                     alt="COONECTA"
-                    className="h-8 md:h-10 w-auto object-contain transition-transform duration-500 group-hover:scale-105 brightness-0 invert"
+                    className="h-8 md:h-10 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
                     onError={() => setLogoError(true)}
                   />
                 ) : (
@@ -400,31 +400,73 @@ const App = () => {
         </div>
       </Section>
 
-      <footer className="bg-dark text-white/30 py-16 md:py-24 px-6 border-t border-white/5 font-display">
+      <footer className="bg-dark text-white/30 py-12 md:py-20 px-6 border-t border-white/5 font-display relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-10">
-            <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <div className="mb-6 h-10 md:h-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
+            <div className="col-span-1 md:col-span-1">
+              <div className="mb-6 h-10">
                 {!logoError ? (
-                  <img src="/conecta-logo.png" alt="COONECTA" className="h-full w-auto opacity-30 grayscale brightness-200" />
+                  <img src="/conecta-logo.png" alt="COONECTA" className="h-full w-auto brightness-200 grayscale opacity-40 hover:opacity-100 transition-opacity" />
                 ) : (
-                  <span className="text-2xl md:text-3xl font-black text-white/20 tracking-tighter italic">COONECTA</span>
+                  <span className="text-2xl font-black text-white/20 tracking-tighter italic">COONECTA</span>
                 )}
               </div>
-              <p className="max-w-sm font-bold italic tracking-tighter leading-tight text-xs md:text-sm">Transformando el ADN de las organizaciones sociales desde 2004.</p>
+              <p className="font-bold italic tracking-tighter leading-tight text-xs md:text-sm opacity-60">
+                Transformando el ADN de las organizaciones sociales desde 2004. Rigor técnico e impacto humano.
+              </p>
             </div>
-            {/* ... */}
+
+            <div>
+              <h4 className="text-[10px] font-black text-accent uppercase tracking-[0.3em] mb-6">Navegación</h4>
+              <ul className="space-y-3">
+                {NAV_LINKS.slice(0, 4).map(link => (
+                  <li key={link.name}>
+                    <a href={link.href} onClick={(e) => handleNavClick(e, link.href)} className="text-[11px] font-bold uppercase tracking-wider hover:text-white transition-colors">{link.name}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-[10px] font-black text-accent uppercase tracking-[0.3em] mb-6">Contacto</h4>
+              <ul className="space-y-4">
+                <li className="flex items-center gap-3 text-[11px] font-bold tracking-tight">
+                  <Mail size={12} className="text-accent/50" />
+                  <span>contacto@conectaconsultores.com</span>
+                </li>
+                <li className="flex items-center gap-3 text-[11px] font-bold tracking-tight">
+                  <Phone size={12} className="text-accent/50" />
+                  <span>+591 707 12345</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-[10px] font-black text-accent uppercase tracking-[0.3em] mb-6">Social</h4>
+              <div className="flex gap-4">
+                {[Facebook, Linkedin, Youtube, Instagram].map((Icon, i) => (
+                  <a key={i} href="#" className="w-8 h-8 glass rounded-lg flex items-center justify-center text-white/20 hover:text-accent hover:border-accent/30 transition-all">
+                    <Icon size={14} />
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[9px] md:text-[10px] font-black uppercase tracking-widest gap-6">
-            <div className="flex flex-col md:flex-row items-center gap-6">
+
+          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[9px] font-black uppercase tracking-widest gap-6">
+            <div className="flex items-center gap-8">
               <button
                 onClick={() => setView('login')}
-                className="text-white/20 hover:text-accent transition-colors"
+                className="group flex items-center gap-2 text-white/10 hover:text-accent transition-all animate-pulse"
               >
-                Acceso Consultores
+                <div className="w-6 h-6 bg-white/5 rounded-md flex items-center justify-center group-hover:bg-accent/10">
+                  <Lock size={10} />
+                </div>
+                <span>Acceso Consultores</span>
               </button>
             </div>
-            <p className="text-center md:text-right">© 2026 COONECTA Consultores en Impacto Social. Todos los derechos reservados.</p>
+            <p className="text-center md:text-right opacity-30 italic">© 2026 COONECTA Consultores en Impacto Social. <br className="md:hidden" /> Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

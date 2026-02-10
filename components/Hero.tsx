@@ -56,12 +56,12 @@ const Hero = () => {
         </div>
 
         <div className="space-y-6 md:space-y-8 animate-fade-in-up">
-          <h2 className="text-3xl md:text-6xl lg:text-7xl text-white max-w-5xl leading-[1.1] md:leading-[1.05] font-black drop-shadow-2xl px-2 tracking-tighter italic">
+          <h2 className="text-3xl md:text-5xl lg:text-5xl text-white max-w-4xl leading-[1.1] md:leading-[1.05] font-black drop-shadow-2xl px-2 tracking-tighter italic">
             Transformamos organizaciones sociales en agentes de cambio <br className="hidden md:block" />
             <span className="text-accent underline decoration-white/10 underline-offset-[12px]">medible</span> y <span className="text-accent underline decoration-white/10 underline-offset-[12px]">sostenible</span>.
           </h2>
 
-          <p className="text-sm md:text-lg text-white/50 max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-xs md:text-base text-white/50 max-w-xl mx-auto font-medium leading-relaxed">
             Estrategias de intervención de alto nivel técnico para maximizar el retorno social de cada inversión.
           </p>
         </div>
