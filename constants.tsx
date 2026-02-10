@@ -118,7 +118,7 @@ export const TEAM: TeamMember[] = [
   {
     name: "Dr. Limbert Ayarde",
     role: "Consultor Políticas Públicas",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop",
+    image: "/limbert-ayarde.png",
     bio: ["Doctor en Ciencias Empresariales", "Ex-asesor gubernamental", "Analista de datos públicos"]
   }
 ];

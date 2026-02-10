@@ -100,10 +100,7 @@ const App = () => {
     }
 
     return (
-      <>
-        <AdminDashboard onLogout={handleLogout} />
-        <ConectaAI />
-      </>
+      <AdminDashboard onLogout={handleLogout} />
     );
   }
 
