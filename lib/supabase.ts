@@ -1,20 +1,21 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Validación de variables de entorno
+// Validación de variables de entorno con advertencias claras
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || supabaseUrl === 'https://tu-proyecto-id.supabase.co') {
-    console.error('⚠️ SUPABASE_URL no configurada. Configura .env.local');
-}
+const isConfigured = supabaseUrl &&
+    supabaseUrl !== 'https://tu-proyecto-id.supabase.co' &&
+    supabaseAnonKey &&
+    supabaseAnonKey !== 'tu-anon-key-aqui';
 
-if (!supabaseAnonKey || supabaseAnonKey === 'tu-anon-key-aqui') {
-    console.error('⚠️ SUPABASE_ANON_KEY no configurada. Configura .env.local');
+if (!isConfigured) {
+    console.warn('🔴 CONECTA: Supabase no está configurado correctamente en este entorno.');
 }
 
 export const supabase = createClient(
-    supabaseUrl || 'https://placeholder.supabase.co',
-    supabaseAnonKey || 'placeholder-key',
+    supabaseUrl || 'https://missing-url.supabase.co',
+    supabaseAnonKey || 'missing-key',
     {
         auth: {
             autoRefreshToken: true,
@@ -23,6 +24,9 @@ export const supabase = createClient(
         },
     }
 );
+
+// Función utilitaria para verificar configuración
+export const isSupabaseConfigured = () => isConfigured;
 
 // Tipos para la sesión
 export type AuthUser = {

@@ -100,27 +100,27 @@ export const TEAM: TeamMember[] = [
   {
     name: "Bernarda Sarué Pereira",
     role: "Directora Ejecutiva",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop",
+    image: "/bernarda-sarue.png",
     bio: ["Socióloga, Máster en Educación", "20 años de experiencia", "Especialista en Evaluación de Impacto"]
   },
   {
     name: "Dr. Gustavo Gottret",
     role: "Consultor Senior Educación",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop",
+    image: "/gustavo-gottret.png",
     bio: ["Doctor en Psicología Pedagógica", "25+ años en sistemas educativos", "Experiencia global"]
+  },
+  {
+    name: "Dra. Patricia Politi",
+    role: "Especialista en Evaluación T. Pedagógica",
+    image: "/patricia-politi.png",
+    bio: ["Especialista en Evaluación de Impacto Social", "Experta en metodologías cualitativas", "Investigadora Senior"]
   },
   {
     name: "Dr. Limbert Ayarde",
     role: "Consultor Políticas Públicas",
     image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop",
     bio: ["Doctor en Ciencias Empresariales", "Ex-asesor gubernamental", "Analista de datos públicos"]
-  },
-  {
-    name: "Javier C. Soria",
-    role: "Consultor Data Analytics",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop",
-    bio: ["Ingeniero Informático", "Especialista Big Data", "Integración IA"]
-  },
+  }
 ];
 
 export const FAQS: FaqItem[] = [

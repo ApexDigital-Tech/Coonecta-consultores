@@ -51,13 +51,9 @@ export function useAuth(): UseAuthReturn {
                 const { data: { session } } = await supabase.auth.getSession();
 
                 if (session?.user) {
-                    const isAdminResponse = await supabase
-                        .from('profiles')
-                        .select('role')
-                        .eq('id', session.user.id)
-                        .single();
-
-                    const isAdmin = isAdminResponse.data?.role === 'admin';
+                    // Usar RPC para evitar bloqueo por RLS circular
+                    const { data: role } = await supabase.rpc('get_my_role');
+                    const isAdmin = role === 'admin';
 
                     updateGlobalState({
                         user: session.user,
@@ -82,13 +78,9 @@ export function useAuth(): UseAuthReturn {
                 console.log('Auth event:', event);
 
                 if (session?.user) {
-                    const isAdminResponse = await supabase
-                        .from('profiles')
-                        .select('role')
-                        .eq('id', session.user.id)
-                        .single();
-
-                    const isAdmin = isAdminResponse.data?.role === 'admin';
+                    // Usar RPC para evitar bloqueo por RLS circular
+                    const { data: role } = await supabase.rpc('get_my_role');
+                    const isAdmin = role === 'admin';
 
                     updateGlobalState({
                         user: session.user,
