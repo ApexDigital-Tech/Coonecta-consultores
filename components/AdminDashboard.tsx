@@ -17,9 +17,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     const [view, setView] = useState<'calendar' | 'list'>('calendar');
     const [currentMonth, setCurrentMonth] = useState(new Date());
 
-    // Day Detail Modal State
+    // Detail Modal State
     const [selectedDay, setSelectedDay] = useState<number | null>(null);
     const [showDayModal, setShowDayModal] = useState(false);
+    const [viewingAppt, setViewingAppt] = useState<AppointmentData | null>(null);
     const formRef = React.useRef<HTMLDivElement>(null);
 
     // Manual Scheduling Form State
@@ -192,15 +193,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                             <div className="text-xs text-accent font-bold truncate">📌 {appt.topic}</div>
                             <div className="text-xs text-gray-400 truncate">{appt.needType}</div>
 
-                            {/* Detail Tooltip */}
-                            <div className="absolute left-0 top-full mt-2 z-50 bg-gray-800 text-white text-xs p-3 rounded-lg shadow-xl w-64 hidden group-hover/tooltip:block">
-                                <div className="mb-2 pb-1 border-b border-gray-600 font-bold text-accent">Detalles de Contacto</div>
-                                <div className="grid grid-cols-[20px_1fr] gap-1">
-                                    <span>📧</span> <span className="truncate">{appt.email || 'No registrado'}</span>
-                                    <span>📞</span> <span className="truncate">{appt.phone || 'No registrado'}</span>
-                                    <span>🏢</span> <span className="truncate">{appt.organization}</span>
-                                    <span>🕒</span> <span>{appt.preferredDateTime}</span>
+                            {/* Detail Tooltip or Click to View */}
+                            <div
+                                onClick={(e) => { e.stopPropagation(); setViewingAppt(appt); }}
+                                className="absolute inset-0 z-10 cursor-pointer"
+                            />
+                            <div className="absolute left-0 top-full mt-2 z-50 bg-gray-800 text-white text-xs p-3 rounded-lg shadow-xl w-72 hidden group-hover/tooltip:block border border-white/10 backdrop-blur-md">
+                                <div className="mb-2 pb-1 border-b border-gray-600 font-bold text-accent flex justify-between items-center">
+                                    <span>Ficha Técnica Lead</span>
+                                    <Sparkles size={10} />
                                 </div>
+                                <div className="grid grid-cols-[20px_1fr] gap-2">
+                                    <span className="opacity-50">📧</span> <span className="truncate font-medium">{appt.email || 'No registrado'}</span>
+                                    <span className="opacity-50">📞</span> <span className="truncate font-medium">{appt.phone || 'No registrado'}</span>
+                                    <span className="opacity-50">🏢</span> <span className="truncate font-medium">{appt.organization}</span>
+                                    <span className="opacity-50">🕒</span> <span className="font-medium">{appt.preferredDateTime}</span>
+                                    <span className="opacity-50">📝</span> <span className="line-clamp-2 italic">{appt.notes || 'Sin notas adicionales'}</span>
+                                </div>
+                                <div className="mt-2 pt-2 border-t border-gray-600 text-[9px] font-black uppercase tracking-widest text-center text-accent/60">Clic para ver expediente completo</div>
                             </div>
                         </div>
                     ) : (
@@ -357,6 +367,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                                                 </td>
                                                 <td className="px-10 py-8 text-right">
                                                     <div className="flex items-center justify-end gap-3 translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                                                        <button onClick={() => setViewingAppt(appt)} className="w-12 h-12 bg-white/5 text-accent rounded-2xl hover:bg-accent hover:text-dark transition-all flex items-center justify-center shadow-premium" title="Expediente Completo"><Search size={20} /></button>
                                                         <button onClick={() => handleStatusChange(appt.id!, 'scheduled')} className="w-12 h-12 bg-white/5 text-secondary rounded-2xl hover:bg-secondary hover:text-white transition-all flex items-center justify-center shadow-premium"><CheckCircle size={20} /></button>
                                                         <button onClick={() => handleStatusChange(appt.id!, 'closed')} className="w-12 h-12 bg-white/5 text-white/20 rounded-2xl hover:bg-white/10 hover:text-white transition-all flex items-center justify-center shadow-premium"><XCircle size={20} /></button>
                                                     </div>
@@ -659,6 +670,134 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                                         </form>
                                     </div>
                                 )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {/* APPOINTMENT DETAIL MODAL (LEAD EXPEDIENTE) */}
+                {viewingAppt && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-dark/95 backdrop-blur-2xl p-8 animate-in fade-in duration-500">
+                        <div className="bg-dark/40 border border-white/10 rounded-[4rem] shadow-[0_0_100px_rgba(0,0,0,1)] w-full max-w-4xl overflow-hidden animate-zoom-in relative">
+                            {/* Decorative Background */}
+                            <div className="absolute inset-0 mesh-gradient opacity-10 pointer-events-none" />
+                            <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 blur-[120px] rounded-full" />
+
+                            {/* Modal Header */}
+                            <div className="p-12 relative z-10 flex justify-between items-start border-b border-white/5 bg-white/[0.02]">
+                                <div className="flex gap-8 items-center">
+                                    <div className="w-24 h-24 glass rounded-[2.5rem] flex items-center justify-center text-accent shadow-premium">
+                                        <User size={48} />
+                                    </div>
+                                    <div>
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <span className="bg-accent/10 text-accent text-[9px] font-black uppercase tracking-[0.3em] px-3 py-1 rounded-full border border-accent/20 italic">Expediente Lead Elite</span>
+                                            {viewingAppt.status === 'new' && <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />}
+                                        </div>
+                                        <h3 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
+                                            {viewingAppt.clientName}
+                                        </h3>
+                                        <p className="text-white/40 text-sm font-bold uppercase tracking-widest mt-3 flex items-center gap-2">
+                                            <Briefcase size={14} className="text-accent" />
+                                            {viewingAppt.organization}
+                                        </p>
+                                    </div>
+                                </div>
+                                <button onClick={() => setViewingAppt(null)} className="w-16 h-16 glass rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all hover:rotate-90">
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            {/* Modal Content */}
+                            <div className="p-12 relative z-10 grid md:grid-cols-2 gap-12 max-h-[60vh] overflow-y-auto scrollbar-none">
+                                {/* Contact Info */}
+                                <div className="space-y-8">
+                                    <div className="space-y-6">
+                                        <h4 className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] border-b border-white/5 pb-4 italic">Información de Enlace</h4>
+                                        <div className="space-y-5">
+                                            <div className="flex items-center gap-6 group">
+                                                <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-inner-premium border border-white/5">
+                                                    <Mail size={20} />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-1">Canal de Comunicación</p>
+                                                    <p className="text-lg font-bold text-white group-hover:text-accent transition-colors">{viewingAppt.email || 'No registrado'}</p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-6 group">
+                                                <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all shadow-inner-premium border border-white/5">
+                                                    <Phone size={20} />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-1">Contacto Directo</p>
+                                                    <p className="text-lg font-bold text-white group-hover:text-secondary transition-colors">{viewingAppt.phone || 'No registrado'}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <h4 className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] border-b border-white/5 pb-4 italic">Agenda Estratégica</h4>
+                                        <div className="bg-white/5 rounded-3xl p-6 border border-white/5 relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 p-4 opacity-10"><Calendar size={60} className="text-accent" /></div>
+                                            <div className="relative z-10">
+                                                <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-2">Fecha y Hora Propuesta</p>
+                                                <p className="text-xl font-black text-accent italic">{viewingAppt.preferredDateTime}</p>
+                                                <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+                                                    <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">Consultor Asignado:</span>
+                                                    <span className="text-[11px] font-bold text-white/60 italic">{viewingAppt.consultant}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Project Context */}
+                                <div className="space-y-8">
+                                    <div className="space-y-6">
+                                        <h4 className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] border-b border-white/5 pb-4 italic">Eje Temático</h4>
+                                        <div className="bg-primary/20 rounded-3xl p-8 border border-primary/30 shadow-inner-premium relative overflow-hidden group/topic">
+                                            <Sparkles size={120} className="absolute -bottom-10 -right-10 text-accent opacity-5 group-hover/topic:opacity-10 transition-opacity" />
+                                            <div className="relative z-10">
+                                                <div className="inline-block bg-accent/20 text-accent px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-accent/20 mb-4">{viewingAppt.needType}</div>
+                                                <h5 className="text-2xl font-black text-white italic tracking-tighter leading-tight mb-4">{viewingAppt.topic}</h5>
+                                                <div className="w-12 h-1 bg-accent/30 rounded-full" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <h4 className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] border-b border-white/5 pb-4 italic">Notas de Diagnóstico Inicial</h4>
+                                        <div className="bg-white/[0.03] rounded-3xl p-6 border border-white/5 min-h-[140px]">
+                                            <p className="text-sm font-medium text-white/60 leading-relaxed italic">
+                                                {viewingAppt.notes || "El lead no ha dejado comentarios adicionales. Se requiere auditoría en la primera sesión."}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Modal Footer (Actions) */}
+                            <div className="p-12 relative z-10 border-t border-white/5 bg-white/[0.02] flex justify-between items-center">
+                                <span className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] italic ${viewingAppt.status === 'new' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
+                                    viewingAppt.status === 'scheduled' ? 'bg-secondary/20 text-secondary border border-secondary/30' :
+                                        'bg-white/5 text-white/30 border border-white/10'
+                                    }`}>
+                                    Estado: {viewingAppt.status || 'NEW'}
+                                </span>
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => { handleStatusChange(viewingAppt.id!, 'scheduled'); setViewingAppt(null); }}
+                                        className="h-16 px-8 bg-secondary text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-secondary/20 italic flex items-center gap-3"
+                                    >
+                                        <CheckCircle size={18} /> Validar y Agendar
+                                    </button>
+                                    <button
+                                        onClick={() => { handleStatusChange(viewingAppt.id!, 'closed'); setViewingAppt(null); }}
+                                        className="h-16 px-8 bg-white/5 text-white/40 font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 transition-all border border-white/10"
+                                    >
+                                        Archivar Lead
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
