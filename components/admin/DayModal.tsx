@@ -92,68 +92,56 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
         const isSelected = selectedSlot === time;
 
         return (
-            <div key={time} className="space-y-3">
+            <div key={time} className="space-y-2">
                 <div
                     onClick={() => !appt && setSelectedSlot(isSelected ? null : time)}
-                    className={`p-3 rounded-xl border min-h-[60px] flex items-center transition-all cursor-pointer ${appt ? 'bg-primary/20 border-primary/30' :
-                        isSelected ? 'bg-accent/30 border-accent/60 shadow-[0_0_20px_rgba(212,175,55,0.2)]' :
-                            'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'
+                    className={`p-2 rounded-xl border min-h-[50px] flex items-center transition-all cursor-pointer group ${appt ? 'bg-primary/10 border-primary/20' :
+                        isSelected ? 'bg-accent/20 border-accent/30' :
+                            'bg-white/5 border-white/5 hover:bg-white/[0.08]'
                         }`}
                 >
-                    <div className="w-14 flex items-center justify-center border-r border-white/10 mr-4 font-black text-white/30 text-xs italic leading-none">{time}</div>
+                    <div className="w-12 flex items-center justify-center border-r border-white/10 mr-3 font-black text-white/20 text-[9px] italic leading-none shrink-0">{time}</div>
 
                     {appt ? (
-                        <div className="flex-1 flex justify-between items-center overflow-hidden">
+                        <div className="flex-1 flex justify-between items-center overflow-hidden min-w-0">
                             <div className="overflow-hidden">
-                                <div className="font-black text-white text-sm italic leading-tight truncate">{appt.clientName}</div>
-                                <div className="flex gap-2 items-center text-[7px] font-bold uppercase tracking-wider text-white/30 mt-0.5">
-                                    <span className="text-accent truncate">{appt.organization || 'ORG'}</span>
+                                <div className="font-bold text-white text-[11px] italic leading-tight truncate">{appt.clientName}</div>
+                                <div className="flex gap-1.5 items-center text-[7px] font-bold uppercase tracking-wider text-white/30 truncate mt-0.5">
+                                    <span className="text-secondary truncate">{appt.organization || 'ORG'}</span>
                                     <span>•</span>
                                     <span className="truncate">{appt.topic || 'Sin tema'}</span>
                                 </div>
-                                <div className="flex gap-3 items-center text-[6px] font-black uppercase tracking-[0.15em] text-white/20 mt-1">
-                                    {appt.email && <span className="flex items-center gap-1"><Mail size={6} className="text-primary" /> {appt.email}</span>}
-                                    {appt.phone && <span className="flex items-center gap-1"><Phone size={6} className="text-secondary" /> {appt.phone}</span>}
-                                </div>
                             </div>
-                            <button onClick={(e) => { e.stopPropagation(); onViewLead(appt); }} className="w-7 h-7 glass rounded-lg flex items-center justify-center text-accent ml-2 shrink-0 hover:bg-accent hover:text-dark transition-colors"><Search size={12} /></button>
+                            <button onClick={(e) => { e.stopPropagation(); onViewLead(appt); }} className="w-6 h-6 glass rounded-lg flex items-center justify-center text-accent ml-2 shrink-0 hover:bg-accent hover:text-dark transition-colors">
+                                <Search size={10} />
+                            </button>
                         </div>
                     ) : (
-                        <div className={`flex-1 flex items-center font-black uppercase text-[8px] tracking-[0.2em] transition-all ${isSelected ? 'text-accent' : 'text-white/10 group-hover:text-accent/60'}`}>
-                            {isSelected ? (
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 size={12} className="text-accent animate-pulse" />
-                                    <span>Completar Registro</span>
-                                </div>
-                            ) : (
-                                <>
-                                    <Plus size={10} className="mr-2" /> Disponible
-                                </>
-                            )}
+                        <div className={`flex-1 flex items-center font-black uppercase text-[8px] tracking-widest transition-all ${isSelected ? 'text-accent' : 'text-white/10 group-hover:text-white/30'}`}>
+                            {isSelected ? 'Registrar Cita' : 'Disponible'}
                         </div>
                     )}
                 </div>
 
-                {/* FORMULARIO INLINE */}
                 {isSelected && (
-                    <div className="p-5 glass-dark rounded-xl border border-accent/30 animate-in slide-in-from-top-2 duration-300">
+                    <div className="p-4 bg-white/5 rounded-xl border border-accent/20 animate-in slide-in-from-top-2 duration-300">
                         <form onSubmit={handleManualSubmit} className="grid grid-cols-2 gap-3">
                             <input
                                 required
-                                className="w-full h-10 px-4 bg-white/5 border border-white/10 rounded-lg text-white text-xs font-bold outline-none focus:border-accent/40"
+                                className="w-full h-8 px-3 bg-white/5 border border-white/10 rounded-lg text-white text-[10px] font-medium outline-none focus:border-accent/40"
                                 placeholder="Nombre Cliente"
                                 value={formData.clientName}
                                 onChange={e => setFormData({ ...formData, clientName: e.target.value })}
                             />
                             <input
-                                className="w-full h-10 px-4 bg-white/5 border border-white/10 rounded-lg text-white text-xs font-bold outline-none focus:border-accent/40"
+                                className="w-full h-8 px-3 bg-white/5 border border-white/10 rounded-lg text-white text-[10px] font-medium outline-none focus:border-accent/40"
                                 placeholder="Organización"
                                 value={formData.organization}
                                 onChange={e => setFormData({ ...formData, organization: e.target.value })}
                             />
                             <input
                                 required
-                                className="col-span-2 w-full h-10 px-4 bg-white/5 border border-accent/20 rounded-lg text-white text-xs font-bold outline-none focus:border-accent"
+                                className="col-span-2 w-full h-8 px-3 bg-white/5 border border-accent/20 rounded-lg text-white text-[10px] font-medium outline-none focus:border-accent"
                                 placeholder="Tema / Requerimiento"
                                 value={formData.topic}
                                 onChange={e => setFormData({ ...formData, topic: e.target.value })}
@@ -161,22 +149,22 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
                             <input
                                 required
                                 type="email"
-                                className="w-full h-10 px-4 bg-white/5 border border-white/10 rounded-lg text-white text-xs font-bold outline-none focus:border-accent/40"
-                                placeholder="Correo Coreo Electrónico"
+                                className="w-full h-8 px-3 bg-white/5 border border-white/10 rounded-lg text-white text-[10px] font-medium outline-none focus:border-accent/40"
+                                placeholder="Email"
                                 value={formData.email}
                                 onChange={e => setFormData({ ...formData, email: e.target.value })}
                             />
                             <input
                                 required
-                                className="w-full h-10 px-4 bg-white/5 border border-white/10 rounded-lg text-white text-xs font-bold outline-none focus:border-accent/40"
-                                placeholder="Teléfono de Contacto"
+                                className="w-full h-8 px-3 bg-white/5 border border-white/10 rounded-lg text-white text-[10px] font-medium outline-none focus:border-accent/40"
+                                placeholder="Teléfono"
                                 value={formData.phone}
                                 onChange={e => setFormData({ ...formData, phone: e.target.value })}
                             />
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="col-span-2 h-10 bg-accent text-dark font-black uppercase tracking-widest rounded-lg text-[9px] italic hover:scale-[1.02] transition-all"
+                                className="col-span-2 h-9 bg-accent text-dark font-black uppercase tracking-widest rounded-lg text-[9px] italic hover:scale-[1.01] active:scale-95 transition-all"
                             >
                                 {isSubmitting ? 'REGISTRANDO...' : 'CONFIRMAR CITA'}
                             </button>
@@ -188,29 +176,29 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
     };
 
     return (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-dark/95 backdrop-blur-xl p-4 animate-in fade-in duration-500">
-            <div className="bg-white/5 border border-white/10 rounded-[2.5rem] shadow-premium w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden animate-zoom-in">
-                <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/[0.02] shrink-0">
-                    <div className="flex gap-4 items-center">
-                        <div className="w-12 h-12 bg-accent text-dark rounded-xl flex items-center justify-center font-black text-xl italic">{day}</div>
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-dark/95 backdrop-blur-md p-4 animate-in fade-in duration-300">
+            <div className="bg-[#0f172a] border border-white/10 rounded-[2rem] shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-zoom-in">
+                <div className="p-4 md:p-5 border-b border-white/5 flex justify-between items-center bg-white/[0.02] shrink-0">
+                    <div className="flex gap-3 items-center">
+                        <div className="w-9 h-9 bg-accent text-dark rounded-xl flex items-center justify-center font-black text-base italic">{day}</div>
                         <div>
-                            <h3 className="text-xl font-black text-white italic tracking-tighter uppercase leading-tight">
+                            <h3 className="text-sm md:text-base font-black text-white italic tracking-tighter uppercase leading-tight">
                                 {month.toLocaleString('es-ES', { month: 'long' })} {month.getFullYear()}
                             </h3>
-                            <p className="text-[8px] font-bold text-white/20 uppercase tracking-widest mt-0.5">Planificación Diaria</p>
+                            <p className="text-[7px] font-bold text-white/20 uppercase tracking-widest mt-0.5">Gestión de Agenda</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="w-10 h-10 glass rounded-full flex items-center justify-center text-white/30 hover:text-white transition-all"><X size={18} /></button>
+                    <button onClick={onClose} className="w-8 h-8 glass rounded-full flex items-center justify-center text-white/30 hover:text-white transition-all"><X size={16} /></button>
                 </div>
-                <div className="flex-1 overflow-y-auto p-6 lg:p-8 scrollbar-none">
-                    <div className="grid lg:grid-cols-2 gap-8 items-start">
-                        <div className="space-y-4">
-                            <h4 className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] italic border-b border-white/5 pb-3">☀️ Mañana</h4>
-                            <div className="space-y-3">{morningSlots.map(renderSlot)}</div>
+                <div className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-none">
+                    <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-start">
+                        <div className="space-y-3">
+                            <h4 className="text-[7px] font-black text-white/20 uppercase tracking-[0.4em] italic border-b border-white/5 pb-1.5 flex items-center gap-2">☀️ MAÑANA</h4>
+                            <div className="space-y-2">{morningSlots.map(renderSlot)}</div>
                         </div>
-                        <div className="space-y-4">
-                            <h4 className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] italic border-b border-white/5 pb-3">🌤️ Tarde</h4>
-                            <div className="space-y-3">{afternoonSlots.map(renderSlot)}</div>
+                        <div className="space-y-3">
+                            <h4 className="text-[7px] font-black text-white/20 uppercase tracking-[0.4em] italic border-b border-white/5 pb-1.5 flex items-center gap-2">🌤️ TARDE</h4>
+                            <div className="space-y-2">{afternoonSlots.map(renderSlot)}</div>
                         </div>
                     </div>
                 </div>

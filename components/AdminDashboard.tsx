@@ -65,36 +65,38 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             <Sidebar currentView={view} setView={setView} onLogout={onLogout} />
 
             <main className="flex-1 h-screen overflow-hidden flex flex-col relative z-10">
-                <header className="px-8 py-6 flex justify-between items-center border-b border-white/5 bg-dark/40 backdrop-blur-xl">
-                    <div className="flex items-center gap-10">
+                <header className="px-5 py-4 md:px-8 md:py-5 flex flex-col md:flex-row justify-between items-center bg-dark/40 backdrop-blur-xl border-b border-white/5 gap-4">
+                    <div className="flex items-center gap-6 md:gap-10 w-full md:w-auto">
                         <div className="flex flex-col">
-                            <h1 className="text-xl font-black italic tracking-tighter text-white">Dashboard <span className="text-accent">Victoria</span></h1>
-                            <p className="text-[9px] font-bold text-white/20 uppercase tracking-[0.3em]">Lead Management</p>
+                            <h1 className="text-base md:text-lg font-black italic tracking-tighter text-white">Dashboard <span className="text-accent">Victoria</span></h1>
+                            <p className="text-[7px] font-bold text-white/20 uppercase tracking-[0.2em] -mt-0.5">Control de Gestión</p>
                         </div>
-                        <StatsSummary appointments={appointments} />
+                        <div className="flex-1 md:flex-none">
+                            <StatsSummary appointments={appointments} />
+                        </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <button onClick={refreshData} className="p-3 bg-white/5 rounded-xl text-white/40 hover:text-accent transition-all group">
-                            <Loader2 size={18} className={loading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500"} />
+                    <div className="flex items-center gap-3 self-end md:self-center">
+                        <button onClick={refreshData} className="p-2.5 bg-white/5 rounded-lg text-white/40 hover:text-accent transition-all group">
+                            <Loader2 size={16} className={loading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500"} />
                         </button>
 
                         <div className="relative">
-                            <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-accent rounded-full border-2 border-dark flex items-center justify-center text-[7px] font-black text-dark">
+                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full border-2 border-dark flex items-center justify-center text-[6px] font-black text-dark">
                                 {appointments.filter(a => a.status === 'new' || !a.status).length}
                             </div>
-                            <button className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/40 hover:text-white transition-all">
-                                <Bell size={18} />
+                            <button className="w-9 h-9 glass rounded-lg flex items-center justify-center text-white/40 hover:text-white transition-all">
+                                <Bell size={16} />
                             </button>
                         </div>
 
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-primary p-0.5 shadow-lg ml-4">
-                            <div className="w-full h-full bg-dark rounded-[9px] flex items-center justify-center font-black text-accent italic text-xs">AD</div>
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-accent/50 to-primary/50 p-0.5 ml-2">
+                            <div className="w-full h-full bg-dark rounded-[7px] flex items-center justify-center font-black text-accent italic text-[10px]">AD</div>
                         </div>
                     </div>
                 </header>
 
-                <div className="flex-1 overflow-y-auto p-12 scrollbar-none">
+                <div className="flex-1 overflow-y-auto p-4 md:p-10 scrollbar-none">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center h-full gap-6">
                             <div className="w-20 h-20 glass rounded-[2rem] flex items-center justify-center animate-float">
