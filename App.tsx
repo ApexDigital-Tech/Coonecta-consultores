@@ -5,7 +5,8 @@ import ConectaAI from './components/ConectaAI';
 import AdminDashboard from './components/AdminDashboard';
 import LoginForm from './components/auth/LoginForm';
 import { useAuth } from './hooks/useAuth';
-import { SERVICES, CASES, TEAM, FAQS, NAV_LINKS } from './constants';
+import { SERVICES, CASES, FAQS, NAV_LINKS } from './constants';
+import { TEAM } from './TEAM';
 import { Menu, X, CheckCircle, ChevronDown, ChevronUp, Facebook, Linkedin, Youtube, Mail, MapPin, Phone, Puzzle, TrendingDown, ShieldAlert, Lock, Loader2 } from 'lucide-react';
 
 const App = () => {

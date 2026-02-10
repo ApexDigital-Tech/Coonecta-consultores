@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, BarChart2, Target, Briefcase, Globe, Users, BookOpen, Smile, Award } from 'lucide-react';
-import { Service, CaseStudy, TeamMember, FaqItem } from './types';
+import { Service, CaseStudy, FaqItem } from './types';
 
 export const NAV_LINKS = [
   { name: 'Inicio', href: '#hero' },
@@ -93,33 +93,6 @@ export const CASES: CaseStudy[] = [
     challenge: 'Dificultad de comunicación con población meta. Baja participación (20%).',
     solution: ['Diagnóstico participativo', 'Estrategia intercultural', 'Red de articulación'],
     results: ['4x incremento en participación', 'Red con 15 instituciones', '1,200+ beneficiarios']
-  }
-];
-
-export const TEAM: TeamMember[] = [
-  {
-    name: "Bernarda Sarué Pereira",
-    role: "Directora Ejecutiva",
-    image: "/bernarda-sarue.png",
-    bio: ["Socióloga, Máster en Educación", "20 años de experiencia", "Especialista en Evaluación de Impacto"]
-  },
-  {
-    name: "Dr. Gustavo Gottret",
-    role: "Consultor Senior Educación",
-    image: "/gustavo-gottret.png",
-    bio: ["Doctor en Psicología Pedagógica", "25+ años en sistemas educativos", "Experiencia global"]
-  },
-  {
-    name: "Dra. Patricia Politi",
-    role: "Especialista en Evaluación T. Pedagógica",
-    image: "/patricia-politi.png",
-    bio: ["Especialista en Evaluación de Impacto Social", "Experta en metodologías cualitativas", "Investigadora Senior"]
-  },
-  {
-    name: "Dr. Limbert Ayarde",
-    role: "Consultor Políticas Públicas",
-    image: "/limbert-ayarde.png",
-    bio: ["Doctor en Ciencias Empresariales", "Ex-asesor gubernamental", "Analista de datos públicos"]
   }
 ];
 
