@@ -50,9 +50,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
     const refreshData = async () => {
         setLoading(true);
-        const data = await getAppointments();
-        setAppointments(data);
-        setLoading(false);
+        try {
+            const data = await getAppointments();
+            console.log(`📊 Dashboard Sync: ${data.length} registros cargados desde Supabase.`);
+            setAppointments(data);
+        } catch (error) {
+            console.error("❌ Error en refreshData:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleStatusChange = async (id: string, status: AppointmentData['status']) => {
@@ -237,38 +243,37 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full pointer-events-none" />
 
             {/* Sidebar */}
-            <aside className="w-72 glass-dark flex-shrink-0 hidden md:flex flex-col border-r border-white/5 z-20">
-                <div className="p-10 border-b border-white/5 flex flex-col items-center">
-                    <div className="mb-6 p-4 glass rounded-[1.5rem] shadow-premium ring-1 ring-white/10">
-                        <img src="/conecta-logo.png" alt="Conecta" className="h-10 brightness-0 invert" />
+            <aside className="w-64 glass-dark flex-shrink-0 hidden lg:flex flex-col border-r border-white/5 z-20">
+                <div className="p-8 border-b border-white/5 flex flex-col items-center">
+                    <div className="mb-4 p-3 glass rounded-2xl shadow-premium ring-1 ring-white/10">
+                        {/* Placeholder or Logo fix */}
+                        <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center font-black text-dark italic text-xl">C</div>
                     </div>
-                    <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.5em]">Command Center</span>
+                    <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em]">Control Panel</span>
                 </div>
 
-                <nav className="p-6 space-y-3 flex-1">
+                <nav className="p-4 space-y-2 flex-1">
                     <button
                         onClick={() => setView('calendar')}
-                        className={`w-full flex items-center px-6 py-4 rounded-2xl transition-all duration-300 group ${view === 'calendar' ? 'bg-primary text-white shadow-xl shadow-primary/20 italic font-black' : 'text-white/40 hover:bg-white/5 hover:text-white font-bold'}`}
+                        className={`w-full flex items-center px-5 py-3.5 rounded-xl transition-all duration-300 group ${view === 'calendar' ? 'bg-primary/40 text-white shadow-lg shadow-primary/10 border border-primary/20 italic font-black' : 'text-white/30 hover:bg-white/5 hover:text-white font-bold'}`}
                     >
-                        <Calendar size={20} className={`mr-4 ${view === 'calendar' ? 'text-accent' : 'text-white/20 group-hover:text-white/60'}`} />
-                        Calendario
-                        {view === 'calendar' && <div className="ml-auto w-1.5 h-1.5 bg-accent rounded-full shadow-[0_0_10px_rgba(212,175,55,1)]" />}
+                        <Calendar size={18} className={`mr-3 ${view === 'calendar' ? 'text-accent' : 'text-white/20 group-hover:text-white/60'}`} />
+                        <span className="text-sm">Calendario</span>
+                        {view === 'calendar' && <div className="ml-auto w-1.5 h-1.5 bg-accent rounded-full shadow-[0_0_8px_rgba(212,175,55,1)]" />}
                     </button>
                     <button
                         onClick={() => setView('list')}
-                        className={`w-full flex items-center px-6 py-4 rounded-2xl transition-all duration-300 group ${view === 'list' ? 'bg-primary text-white shadow-xl shadow-primary/20 italic font-black' : 'text-white/40 hover:bg-white/5 hover:text-white font-bold'}`}
+                        className={`w-full flex items-center px-5 py-3.5 rounded-xl transition-all duration-300 group ${view === 'list' ? 'bg-primary/40 text-white shadow-lg shadow-primary/10 border border-primary/20 italic font-black' : 'text-white/30 hover:bg-white/5 hover:text-white font-bold'}`}
                     >
-                        <Users size={20} className={`mr-4 ${view === 'list' ? 'text-accent' : 'text-white/20 group-hover:text-white/60'}`} />
-                        Leads de Impacto
-                        {view === 'list' && <div className="ml-auto w-1.5 h-1.5 bg-accent rounded-full shadow-[0_0_10px_rgba(212,175,55,1)]" />}
+                        <Users size={18} className={`mr-3 ${view === 'list' ? 'text-accent' : 'text-white/20 group-hover:text-white/60'}`} />
+                        <span className="text-sm">Leads de Impacto</span>
+                        {view === 'list' && <div className="ml-auto w-1.5 h-1.5 bg-accent rounded-full shadow-[0_0_8px_rgba(212,175,55,1)]" />}
                     </button>
                 </nav>
 
-                <div className="p-8 border-t border-white/5">
-                    <button onClick={onLogout} className="flex items-center text-white/20 hover:text-red-400 transition-all w-full font-black uppercase tracking-widest text-[10px] group">
-                        <div className="mr-4 p-2 bg-white/5 rounded-lg group-hover:bg-red-500/10 transition-colors">
-                            <LogOut size={16} />
-                        </div>
+                <div className="p-6 border-t border-white/5">
+                    <button onClick={onLogout} className="flex items-center text-white/20 hover:text-red-400 transition-all w-full font-black uppercase tracking-widest text-[9px] group px-4">
+                        <LogOut size={14} className="mr-3" />
                         Cerrar Sesión
                     </button>
                 </div>
@@ -277,23 +282,51 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             {/* Main Content */}
             <main className="flex-1 h-screen overflow-hidden flex flex-col relative z-10">
                 {/* Header */}
-                <header className="px-12 py-8 flex justify-between items-center border-b border-white/5 bg-dark/40 backdrop-blur-xl">
-                    <div>
-                        <h1 className="text-3xl font-black text-white tracking-tighter italic uppercase">
-                            {view === 'list' ? 'Gestión de Leads' : 'Agenda Estratégica'}
-                        </h1>
-                        <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-1">
-                            Conecta Consultores • 2026 Edition
-                        </p>
-                    </div>
-                    <div className="flex items-center space-x-6">
-                        <div className="flex items-center space-x-4 p-2 pl-6 pr-3 glass rounded-full border border-white/10 shadow-premium">
-                            <div className="text-right">
-                                <p className="text-xs font-black text-white uppercase tracking-widest">Admin Global</p>
-                                <p className="text-[10px] text-accent font-bold">online</p>
+                <header className="px-8 py-6 flex justify-between items-center border-b border-white/5 bg-dark/40 backdrop-blur-xl">
+                    <div className="flex items-center gap-10">
+                        <div className="flex flex-col">
+                            <h1 className="text-xl font-black italic tracking-tighter text-white">Dashboard <span className="text-accent">Victoria</span></h1>
+                            <p className="text-[9px] font-bold text-white/20 uppercase tracking-[0.3em]">Lead Management</p>
+                        </div>
+
+                        {/* Quick Stats */}
+                        <div className="hidden xl:flex items-center gap-6 pl-8 border-l border-white/5">
+                            <div className="flex flex-col">
+                                <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">Total</span>
+                                <span className="text-lg font-black text-white italic leading-tight">{appointments.length}</span>
                             </div>
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center font-black text-white shadow-xl border-2 border-white/20">
-                                A
+                            <div className="flex flex-col border-l border-white/5 pl-6">
+                                <span className="text-[9px] font-black text-blue-400/40 uppercase tracking-widest">Nuevos</span>
+                                <span className="text-lg font-black text-blue-400 italic leading-tight">{appointments.filter(a => a.status === 'new' || !a.status).length}</span>
+                            </div>
+                            <div className="flex flex-col border-l border-white/5 pl-6">
+                                <span className="text-[9px] font-black text-secondary/40 uppercase tracking-widest">Agendados</span>
+                                <span className="text-lg font-black text-secondary italic leading-tight">{appointments.filter(a => a.status === 'scheduled').length}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={refreshData}
+                            className="p-3 bg-white/5 rounded-xl text-white/40 hover:text-accent hover:bg-white/10 transition-all group"
+                            title="Sincronizar Datos"
+                        >
+                            <Loader2 size={18} className={loading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500"} />
+                        </button>
+
+                        <div className="relative group">
+                            <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-accent rounded-full border-2 border-dark flex items-center justify-center text-[7px] font-black text-dark">
+                                {appointments.filter(a => a.status === 'new' || !a.status).length}
+                            </div>
+                            <button className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/40 hover:text-white transition-all">
+                                <Bell size={18} />
+                            </button>
+                        </div>
+
+                        <div className="flex items-center gap-4 pl-4 border-l border-white/5">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-primary p-0.5 shadow-lg">
+                                <div className="w-full h-full bg-dark rounded-[9px] flex items-center justify-center font-black text-accent italic text-xs">AD</div>
                             </div>
                         </div>
                     </div>
@@ -380,28 +413,28 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                         </div>
                     ) : (
                         // CALENDAR VIEW
-                        <div className="glass-dark rounded-[3.5rem] shadow-premium border border-white/5 p-12 min-h-[700px] animate-zoom-in">
-                            <div className="flex justify-between items-center mb-16 px-4">
+                        <div className="glass-dark rounded-[2.5rem] shadow-premium border border-white/5 p-8 min-h-[600px] animate-zoom-in">
+                            <div className="flex justify-between items-center mb-10 px-4">
                                 <div className="flex flex-col">
-                                    <h2 className="text-5xl font-black capitalize text-white tracking-tighter italic">
+                                    <h2 className="text-3xl font-black capitalize text-white tracking-tighter italic">
                                         {currentMonth.toLocaleString('es-ES', { month: 'long' })}
-                                        <span className="text-accent ml-4 not-italic font-black opacity-30 tracking-[0.2em]">{currentMonth.getFullYear()}</span>
+                                        <span className="text-accent ml-3 not-italic font-black opacity-30 tracking-[0.2em]">{currentMonth.getFullYear()}</span>
                                     </h2>
                                 </div>
-                                <div className="flex items-center p-2 bg-white/5 rounded-3xl border border-white/10">
-                                    <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))} className="p-4 hover:bg-white/10 rounded-2xl transition-all text-white/40 hover:text-white group"><ChevronLeft className="group-hover:-translate-x-1 transition-transform" /></button>
-                                    <div className="w-px h-10 bg-white/5 mx-2" />
-                                    <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))} className="p-4 hover:bg-white/10 rounded-2xl transition-all text-white/40 hover:text-white group"><ChevronRight className="group-hover:translate-x-1 transition-transform" /></button>
+                                <div className="flex items-center p-1.5 bg-white/5 rounded-2xl border border-white/10">
+                                    <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))} className="p-3 hover:bg-white/10 rounded-xl transition-all text-white/40 hover:text-white group"><ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" /></button>
+                                    <div className="w-px h-6 bg-white/5 mx-2" />
+                                    <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))} className="p-3 hover:bg-white/10 rounded-xl transition-all text-white/40 hover:text-white group"><ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" /></button>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-7 gap-6 mb-8 text-center text-white/20 text-[11px] font-black uppercase tracking-[0.4em] italic px-4">
+                            <div className="grid grid-cols-7 gap-4 mb-6 text-center text-white/20 text-[9px] font-black uppercase tracking-[0.3em] italic px-2">
                                 <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
                             </div>
 
-                            <div className="grid grid-cols-7 gap-6">
+                            <div className="grid grid-cols-7 gap-4">
                                 {generateCalendarDays().map((day, idx) => {
-                                    if (!day) return <div key={idx} className="h-44 bg-white/[0.01] rounded-[2.5rem] border border-dashed border-white/5"></div>;
+                                    if (!day) return <div key={idx} className="h-32 bg-white/[0.01] rounded-[1.5rem] border border-dashed border-white/5"></div>;
 
                                     const dayCount = getDayCount(day);
                                     const isToday = new Date().getDate() === day && new Date().getMonth() === currentMonth.getMonth() && new Date().getFullYear() === currentMonth.getFullYear();
@@ -410,30 +443,27 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                                         <div
                                             key={idx}
                                             onClick={() => { setSelectedDay(day); setShowDayModal(true); }}
-                                            className={`h-44 rounded-[2.5rem] p-6 transition-all duration-500 cursor-pointer group relative overflow-hidden border ${isToday ? 'border-accent/40 bg-accent/5' : 'border-white/5 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05] hover:scale-[1.05] hover:shadow-2xl'
+                                            className={`h-32 rounded-[1.5rem] p-4 transition-all duration-300 cursor-pointer group relative overflow-hidden border ${isToday ? 'border-accent/40 bg-accent/5' : 'border-white/5 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05] hover:shadow-xl'
                                                 }`}
                                         >
-                                            <span className={`text-4xl font-black block mb-4 italic tracking-tighter ${isToday ? 'text-accent' : (dayCount > 0 ? 'text-white' : 'text-white/20 group-hover:text-white/60')
+                                            <span className={`text-2xl font-black block mb-2 italic tracking-tighter ${isToday ? 'text-accent' : (dayCount > 0 ? 'text-white' : 'text-white/20 group-hover:text-white/60')
                                                 }`}>
                                                 {day}
-                                                {isToday && <span className="block text-[8px] uppercase tracking-[0.2em] font-black not-italic opacity-60">Hoy</span>}
+                                                {isToday && <span className="block text-[7px] uppercase tracking-[0.1em] font-black not-italic opacity-60">Hoy</span>}
                                             </span>
 
                                             {dayCount > 0 && (
-                                                <div className="absolute bottom-6 left-6 flex items-center gap-2">
-                                                    <div className="w-2 h-2 bg-secondary rounded-full animate-pulse shadow-[0_0_10px_rgba(34,153,84,1)]" />
-                                                    <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">{dayCount} Sesiones</span>
+                                                <div className="absolute bottom-4 left-4 flex items-center gap-1.5">
+                                                    <div className="w-1.5 h-1.5 bg-secondary rounded-full animate-pulse" />
+                                                    <span className="text-[8px] font-black text-white/40 uppercase tracking-widest">{dayCount}</span>
                                                 </div>
                                             )}
 
-                                            <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <div className="w-10 h-10 glass rounded-2xl flex items-center justify-center text-accent">
-                                                    <Plus size={18} />
+                                            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="w-7 h-7 glass rounded-lg flex items-center justify-center text-accent">
+                                                    <Plus size={14} />
                                                 </div>
                                             </div>
-
-                                            {/* Abstract background for active days */}
-                                            {dayCount > 0 && <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-primary/10 blur-2xl rounded-full" />}
                                         </div>
                                     );
                                 })}
@@ -444,74 +474,62 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
                 {/* DAY DETAIL MODAL */}
                 {showDayModal && selectedDay && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-dark/95 backdrop-blur-xl p-8 animate-in fade-in duration-500">
-                        <div className="bg-white/5 border border-white/10 rounded-[4rem] shadow-premium w-full max-w-6xl max-h-[90vh] flex flex-col overflow-hidden animate-zoom-in">
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-dark/95 backdrop-blur-xl p-4 lg:p-12 animate-in fade-in duration-500">
+                        <div className="bg-white/5 border border-white/10 rounded-[3rem] shadow-premium w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden animate-zoom-in">
                             {/* Modal Header */}
-                            <div className="p-12 pb-6 flex justify-between items-center group shrink-0">
-                                <div className="flex gap-8 items-center">
-                                    <div className="w-24 h-24 glass rounded-[2.5rem] flex items-center justify-center text-5xl font-black italic shadow-premium group-hover:rotate-6 transition-transform">
+                            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/[0.02] shrink-0">
+                                <div className="flex gap-6 items-center">
+                                    <div className="w-14 h-14 bg-accent text-dark rounded-2xl flex items-center justify-center font-black text-2xl italic">
                                         {selectedDay}
                                     </div>
                                     <div>
-                                        <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase">Planificación Mensual</h3>
-                                        <p className="text-accent text-sm font-black uppercase tracking-[0.3em] mt-2 opacity-60">
-                                            {currentMonth.toLocaleString('es-ES', { month: 'long', year: 'numeric' })}
-                                        </p>
+                                        <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase leading-tight">
+                                            {currentMonth.toLocaleString('es-ES', { month: 'long' })} {currentMonth.getFullYear()}
+                                        </h3>
+                                        <p className="text-[9px] font-bold text-white/20 uppercase tracking-widest mt-0.5">Planificación Diaria • Command Center</p>
                                     </div>
                                 </div>
-                                <button onClick={() => { setShowDayModal(false); setSelectedSlot(null); }} className="w-20 h-20 glass rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/20 transition-all hover:rotate-90">
-                                    <X size={32} />
+                                <button
+                                    onClick={() => { setShowDayModal(false); setSelectedSlot(null); }}
+                                    className="w-12 h-12 glass rounded-full flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all hover:rotate-90"
+                                >
+                                    <X size={20} />
                                 </button>
                             </div>
 
-                            {/* Modal Body */}
-                            <div className="flex-1 overflow-y-auto p-12 pt-6 scrollbar-none">
-
-                                {/* Split View */}
-                                <div className="grid md:grid-cols-2 gap-12">
-
-                                    {/* Morning Column */}
+                            {/* Modal Content */}
+                            <div className="flex-1 overflow-y-auto p-8 lg:p-10 scrollbar-none">
+                                <div className="grid lg:grid-cols-2 gap-10">
+                                    {/* Morning */}
                                     <div className="space-y-6">
-                                        <h4 className="flex items-center text-[11px] font-black text-white/30 uppercase tracking-[0.4em] mb-8 pb-4 border-b border-white/5 italic">
-                                            <span className="mr-4 text-2xl not-italic">☀️</span> Franja Matutina
+                                        <h4 className="flex items-center text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic border-b border-white/5 pb-4">
+                                            <span className="mr-3 text-xl not-italic">☀️</span> Mañana
                                         </h4>
-                                        <div className="space-y-4">
+                                        <div className="space-y-2.5">
                                             {morningSlots.map(time => {
                                                 const appt = getApptForSlot(selectedDay, time);
                                                 return (
                                                     <div key={time} className="group relative">
-                                                        <div className={`p-6 rounded-[2rem] border min-h-[90px] flex items-center transition-all ${appt ? 'bg-primary/20 border-primary/30 shadow-xl' : 'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'
+                                                        <div className={`p-4 rounded-xl border min-h-[70px] flex items-center transition-all ${appt ? 'bg-primary/20 border-primary/30' : 'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'
                                                             }`}>
-                                                            <div className="w-20 h-full flex flex-col items-center justify-center border-r border-white/10 mr-6 font-black text-white/40 group-hover:text-white transition-colors">
-                                                                <span className="text-lg italic tracking-tight">{time}</span>
+                                                            <div className="w-16 flex items-center justify-center border-r border-white/10 mr-4 font-black text-white/40 text-sm italic">
+                                                                {time}
                                                             </div>
-
                                                             {appt ? (
-                                                                <div className="flex-1 flex justify-between items-center">
-                                                                    <div>
-                                                                        <div className="font-black text-white text-lg italic tracking-tight mb-1">{appt.clientName}</div>
-                                                                        <div className="flex gap-2 items-center">
-                                                                            <div className="text-[10px] font-black text-accent uppercase tracking-widest">{appt.organization}</div>
-                                                                            <span className="text-white/20 text-[10px]">•</span>
-                                                                            <div className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">{appt.topic}</div>
+                                                                <div className="flex-1 flex justify-between items-center overflow-hidden">
+                                                                    <div className="overflow-hidden">
+                                                                        <div className="font-black text-white text-base italic leading-none mb-1 truncate">{appt.clientName}</div>
+                                                                        <div className="flex gap-2 items-center text-[8px] font-bold uppercase tracking-wider text-white/40">
+                                                                            <span className="text-accent truncate">{appt.organization}</span>
+                                                                            <span>•</span>
+                                                                            <span className="truncate">{appt.topic}</span>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/40">
-                                                                        <MoreVertical size={16} />
-                                                                    </div>
+                                                                    <button onClick={() => setViewingAppt(appt)} className="w-8 h-8 glass rounded-lg flex items-center justify-center text-accent ml-2 shrink-0"><Search size={14} /></button>
                                                                 </div>
                                                             ) : (
-                                                                <button
-                                                                    onClick={() => {
-                                                                        setSelectedSlot(time);
-                                                                        setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
-                                                                    }}
-                                                                    className={`flex-1 flex items-center font-black uppercase tracking-widest text-[10px] transition-all group/btn ${selectedSlot === time ? 'text-accent' : 'text-white/20 hover:text-accent'}`}
-                                                                >
-                                                                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center mr-4 group-hover/btn:bg-accent group-hover/btn:text-white transition-all">
-                                                                        <Plus size={16} />
-                                                                    </div>
-                                                                    {selectedSlot === time ? 'Revisar Formulario ↓' : 'Disponible para agenda'}
+                                                                <button onClick={() => setSelectedSlot(time)} className="flex-1 flex items-center text-white/20 hover:text-accent font-black uppercase text-[9px] tracking-widest transition-all">
+                                                                    <Plus size={12} className="mr-2" /> Disponible
                                                                 </button>
                                                             )}
                                                         </div>
@@ -521,45 +539,36 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                                         </div>
                                     </div>
 
-                                    {/* Afternoon Column */}
+                                    {/* Afternoon */}
                                     <div className="space-y-6">
-                                        <h4 className="flex items-center text-[11px] font-black text-white/30 uppercase tracking-[0.4em] mb-8 pb-4 border-b border-white/5 italic">
-                                            <span className="mr-4 text-2xl not-italic">🌤️</span> Franja Vespertina
+                                        <h4 className="flex items-center text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic border-b border-white/5 pb-4">
+                                            <span className="mr-3 text-xl not-italic">🌤️</span> Tarde
                                         </h4>
-                                        <div className="space-y-4">
+                                        <div className="space-y-2.5">
                                             {afternoonSlots.map(time => {
                                                 const appt = getApptForSlot(selectedDay, time);
                                                 return (
                                                     <div key={time} className="group relative">
-                                                        <div className={`p-6 rounded-[2rem] border min-h-[90px] flex items-center transition-all ${appt ? 'bg-primary/20 border-primary/30 shadow-xl' : 'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'
+                                                        <div className={`p-4 rounded-xl border min-h-[70px] flex items-center transition-all ${appt ? 'bg-primary/20 border-primary/30' : 'bg-white/5 border-white/5 hover:bg-white/[0.08] hover:border-white/10'
                                                             }`}>
-                                                            <div className="w-20 h-full flex flex-col items-center justify-center border-r border-white/10 mr-6 font-black text-white/40 group-hover:text-white transition-colors">
-                                                                <span className="text-lg italic tracking-tight">{time}</span>
+                                                            <div className="w-16 flex items-center justify-center border-r border-white/10 mr-4 font-black text-white/40 text-sm italic">
+                                                                {time}
                                                             </div>
-
                                                             {appt ? (
-                                                                <div className="flex-1 flex justify-between items-center">
-                                                                    <div>
-                                                                        <div className="font-black text-white text-lg italic tracking-tight mb-1">{appt.clientName}</div>
-                                                                        <div className="flex gap-2 items-center">
-                                                                            <div className="text-[10px] font-black text-accent uppercase tracking-widest">{appt.organization}</div>
-                                                                            <span className="text-white/20 text-[10px]">•</span>
-                                                                            <div className="text-[10px] font-black text-white/40 uppercase tracking-widest italic">{appt.topic}</div>
+                                                                <div className="flex-1 flex justify-between items-center overflow-hidden">
+                                                                    <div className="overflow-hidden">
+                                                                        <div className="font-black text-white text-base italic leading-none mb-1 truncate">{appt.clientName}</div>
+                                                                        <div className="flex gap-2 items-center text-[8px] font-bold uppercase tracking-wider text-white/40">
+                                                                            <span className="text-accent truncate">{appt.organization}</span>
+                                                                            <span>•</span>
+                                                                            <span className="truncate">{appt.topic}</span>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="w-10 h-10 glass rounded-xl flex items-center justify-center text-white/40">
-                                                                        <MoreVertical size={16} />
-                                                                    </div>
+                                                                    <button onClick={() => setViewingAppt(appt)} className="w-8 h-8 glass rounded-lg flex items-center justify-center text-accent ml-2 shrink-0"><Search size={14} /></button>
                                                                 </div>
                                                             ) : (
-                                                                <button
-                                                                    onClick={() => setSelectedSlot(time)}
-                                                                    className="flex-1 flex items-center text-white/20 hover:text-accent font-black uppercase tracking-widest text-[10px] transition-all group/btn"
-                                                                >
-                                                                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center mr-4 group-hover/btn:bg-accent group-hover/btn:text-white transition-all">
-                                                                        <Plus size={16} />
-                                                                    </div>
-                                                                    Disponible para agenda
+                                                                <button onClick={() => setSelectedSlot(time)} className="flex-1 flex items-center text-white/20 hover:text-accent font-black uppercase text-[9px] tracking-widest transition-all">
+                                                                    <Plus size={12} className="mr-2" /> Disponible
                                                                 </button>
                                                             )}
                                                         </div>
@@ -570,103 +579,18 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                                     </div>
                                 </div>
 
-                                {/* Manual Form Area (appears when slot is selected) */}
+                                {/* Form */}
                                 {selectedSlot && (
-                                    <div ref={formRef} className="mt-16 glass-dark rounded-[3.5rem] p-12 border border-accent/30 shadow-premium animate-fade-in relative overflow-hidden group/form">
-                                        <div className="absolute top-0 right-0 p-8 opacity-10">
-                                            <Save size={120} className="text-accent" />
+                                    <div ref={formRef} className="mt-10 glass-dark rounded-[2rem] p-8 border border-accent/20 animate-fade-in">
+                                        <div className="flex justify-between items-center mb-6">
+                                            <h4 className="text-lg font-black text-white italic tracking-tighter uppercase">Nuevo Registro <span className="text-accent opacity-50">@{selectedSlot}</span></h4>
+                                            <button onClick={() => setSelectedSlot(null)} className="text-[9px] font-black text-white/20 hover:text-red-400 uppercase flex items-center gap-1"><X size={12} /> Descartar</button>
                                         </div>
-                                        <div className="flex justify-between items-center mb-10 relative z-10">
-                                            <h4 className="text-3xl font-black text-white italic tracking-tighter uppercase">
-                                                Manual Entry <span className="text-accent not-italic font-black mx-2 opacity-30 shadow-text-premium">{selectedSlot}</span>
-                                            </h4>
-                                            <button onClick={() => setSelectedSlot(null)} className="flex items-center gap-2 text-[10px] font-black text-white/20 hover:text-red-400 uppercase tracking-widest group/close transition-all">
-                                                <div className="w-8 h-8 glass rounded-full flex items-center justify-center group-hover/close:bg-red-500/10"><X size={14} /></div>
-                                                Descartar
-                                            </button>
-                                        </div>
-                                        <form onSubmit={handleManualSubmit} className="grid md:grid-cols-2 gap-8 relative z-10">
-                                            <div className="space-y-2">
-                                                <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] ml-4">Identidad del Lead</label>
-                                                <div className="relative group">
-                                                    <User size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-accent transition-colors" />
-                                                    <input
-                                                        required
-                                                        type="text"
-                                                        className="w-full h-16 pl-14 pr-6 bg-white/5 border border-white/10 rounded-2xl text-white font-bold outline-none focus:ring-4 ring-accent/20 transition-all shadow-inner-premium placeholder:text-white/10"
-                                                        placeholder="Nombre Completo"
-                                                        value={newApptData.clientName}
-                                                        onChange={e => setNewApptData({ ...newApptData, clientName: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] ml-4">Canal Digital</label>
-                                                <div className="relative group">
-                                                    <Mail size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-accent transition-colors" />
-                                                    <input
-                                                        type="email"
-                                                        className="w-full h-16 pl-14 pr-6 bg-white/5 border border-white/10 rounded-2xl text-white font-bold outline-none focus:ring-4 ring-accent/20 transition-all shadow-inner-premium placeholder:text-white/10"
-                                                        placeholder="email@institucion.org"
-                                                        value={newApptData.email}
-                                                        onChange={e => setNewApptData({ ...newApptData, email: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] ml-4">Organización</label>
-                                                <div className="relative group">
-                                                    <Briefcase size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-accent transition-colors" />
-                                                    <input
-                                                        type="text"
-                                                        className="w-full h-16 pl-14 pr-6 bg-white/5 border border-white/10 rounded-2xl text-white font-bold outline-none focus:ring-4 ring-accent/20 transition-all shadow-inner-premium placeholder:text-white/10"
-                                                        placeholder="Entidad / ONG / Empresa"
-                                                        value={newApptData.organization}
-                                                        onChange={e => setNewApptData({ ...newApptData, organization: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] ml-4">Categoría de Servicio</label>
-                                                <select
-                                                    className="w-full h-16 px-6 bg-white/5 border border-white/10 rounded-2xl text-white font-bold outline-none focus:ring-4 ring-accent/20 transition-all shadow-inner-premium appearance-none italic"
-                                                    value={newApptData.needType}
-                                                    onChange={e => setNewApptData({ ...newApptData, needType: e.target.value })}
-                                                >
-                                                    <option className="bg-dark">Diagnóstico HPO</option>
-                                                    <option className="bg-dark">Evaluación de Impacto</option>
-                                                    <option className="bg-dark">Diseño de Proyectos</option>
-                                                    <option className="bg-dark">Otro</option>
-                                                </select>
-                                            </div>
-                                            <div className="md:col-span-2 space-y-2">
-                                                <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] ml-4">Tema de la Sesión</label>
-                                                <div className="relative group">
-                                                    <Sparkles size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-accent transition-colors" />
-                                                    <input
-                                                        required
-                                                        type="text"
-                                                        className="w-full h-16 pl-14 pr-6 bg-white/5 border border-white/10 rounded-2xl text-white font-bold outline-none focus:ring-4 ring-accent/20 transition-all shadow-inner-premium placeholder:text-white/10"
-                                                        placeholder="Ej: Fortalecimiento de Liderazgo Comunitario"
-                                                        value={newApptData.topic}
-                                                        onChange={e => setNewApptData({ ...newApptData, topic: e.target.value })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="md:col-span-2 pt-6">
-                                                <button
-                                                    type="submit"
-                                                    disabled={isSubmitting}
-                                                    className="w-full h-20 bg-accent text-white font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-accent/20 text-lg italic flex items-center justify-center disabled:opacity-50"
-                                                >
-                                                    {isSubmitting ? (
-                                                        <Loader2 className="animate-spin mr-4" size={24} />
-                                                    ) : (
-                                                        <Save size={24} className="mr-4" />
-                                                    )}
-                                                    {isSubmitting ? 'Encriptando Datos...' : 'Registrar Intervención'}
-                                                </button>
-                                            </div>
+                                        <form onSubmit={handleManualSubmit} className="grid md:grid-cols-2 gap-4">
+                                            <input required className="w-full h-12 px-6 bg-white/5 border border-white/10 rounded-xl text-white text-sm font-bold outline-none focus:border-accent/30" placeholder="Nombre Lead" value={newApptData.clientName} onChange={e => setNewApptData({ ...newApptData, clientName: e.target.value })} />
+                                            <input className="w-full h-12 px-6 bg-white/5 border border-white/10 rounded-xl text-white text-sm font-bold outline-none focus:border-accent/30" placeholder="Email" value={newApptData.email} onChange={e => setNewApptData({ ...newApptData, email: e.target.value })} />
+                                            <input required className="md:col-span-2 w-full h-12 px-6 bg-white/5 border border-white/10 rounded-xl text-white text-sm font-bold outline-none focus:border-accent/30" placeholder="Tema de la Sesión" value={newApptData.topic} onChange={e => setNewApptData({ ...newApptData, topic: e.target.value })} />
+                                            <button type="submit" disabled={isSubmitting} className="md:col-span-2 h-14 bg-accent text-dark font-black uppercase tracking-widest rounded-xl hover:scale-[1.01] transition-all shadow-lg text-xs italic">{isSubmitting ? 'Registrando...' : 'Confirmar Cita'}</button>
                                         </form>
                                     </div>
                                 )}
@@ -676,33 +600,29 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 )}
                 {/* APPOINTMENT DETAIL MODAL (LEAD EXPEDIENTE) */}
                 {viewingAppt && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-dark/95 backdrop-blur-2xl p-8 animate-in fade-in duration-500">
-                        <div className="bg-dark/40 border border-white/10 rounded-[4rem] shadow-[0_0_100px_rgba(0,0,0,1)] w-full max-w-4xl overflow-hidden animate-zoom-in relative">
-                            {/* Decorative Background */}
-                            <div className="absolute inset-0 mesh-gradient opacity-10 pointer-events-none" />
-                            <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 blur-[120px] rounded-full" />
-
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-dark/98 backdrop-blur-2xl p-4 lg:p-12 animate-in fade-in duration-500">
+                        <div className="bg-white/5 border border-white/10 rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-zoom-in">
                             {/* Modal Header */}
-                            <div className="p-12 relative z-10 flex justify-between items-start border-b border-white/5 bg-white/[0.02]">
-                                <div className="flex gap-8 items-center">
-                                    <div className="w-24 h-24 glass rounded-[2.5rem] flex items-center justify-center text-accent shadow-premium">
-                                        <User size={48} />
+                            <div className="p-10 border-b border-white/5 bg-white/[0.02] flex justify-between items-center shrink-0">
+                                <div className="flex gap-6 items-center">
+                                    <div className="w-20 h-20 glass rounded-[1.8rem] flex items-center justify-center text-accent shadow-premium">
+                                        <User size={40} />
                                     </div>
                                     <div>
-                                        <div className="flex items-center gap-3 mb-1">
-                                            <span className="bg-accent/10 text-accent text-[9px] font-black uppercase tracking-[0.3em] px-3 py-1 rounded-full border border-accent/20 italic">Expediente Lead Elite</span>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="bg-accent/10 text-accent text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full border border-accent/20">Expediente Lead</span>
                                             {viewingAppt.status === 'new' && <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />}
                                         </div>
-                                        <h3 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-none">
+                                        <h3 className="text-3xl font-black text-white italic tracking-tighter uppercase leading-none truncate max-w-md">
                                             {viewingAppt.clientName}
                                         </h3>
-                                        <p className="text-white/40 text-sm font-bold uppercase tracking-widest mt-3 flex items-center gap-2">
-                                            <Briefcase size={14} className="text-accent" />
+                                        <p className="text-white/40 text-[11px] font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
+                                            <Briefcase size={12} className="text-accent" />
                                             {viewingAppt.organization}
                                         </p>
                                     </div>
                                 </div>
-                                <button onClick={() => setViewingAppt(null)} className="w-16 h-16 glass rounded-full flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all hover:rotate-90">
+                                <button onClick={() => setViewingAppt(null)} className="w-14 h-14 glass rounded-full flex items-center justify-center text-white/40 hover:text-white transition-all hover:rotate-90">
                                     <X size={24} />
                                 </button>
                             </div>

@@ -48,26 +48,6 @@ export function useAuth(): UseAuthReturn {
 
         const initAuth = async () => {
             try {
-                // Check for bypass first
-                if (localStorage.getItem('sb_bypass_admin') === 'true') {
-                    const mockUser = {
-                        id: 'super-admin-id',
-                        email: 'apexdigital70@gmail.com',
-                        user_metadata: { name: 'Apex Digital Admin' },
-                        app_metadata: {},
-                        aud: 'authenticated',
-                        created_at: new Date().toISOString()
-                    } as User;
-
-                    updateGlobalState({
-                        user: mockUser,
-                        session: { user: mockUser, access_token: 'bypass', refresh_token: 'bypass', expires_in: 3600, token_type: 'bearer' } as Session,
-                        loading: false,
-                        isAdmin: true,
-                    });
-                    return;
-                }
-
                 const { data: { session } } = await supabase.auth.getSession();
 
                 if (session?.user) {
@@ -77,7 +57,7 @@ export function useAuth(): UseAuthReturn {
                         .eq('id', session.user.id)
                         .single();
 
-                    const isAdmin = isAdminResponse.data?.role === 'admin' || !isAdminResponse.data; // Default true if no profile yet
+                    const isAdmin = isAdminResponse.data?.role === 'admin';
 
                     updateGlobalState({
                         user: session.user,
@@ -99,8 +79,6 @@ export function useAuth(): UseAuthReturn {
         // Subscribe to auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (event, session) => {
-                if (localStorage.getItem('sb_bypass_admin') === 'true') return;
-
                 console.log('Auth event:', event);
 
                 if (session?.user) {
@@ -110,7 +88,7 @@ export function useAuth(): UseAuthReturn {
                         .eq('id', session.user.id)
                         .single();
 
-                    const isAdmin = isAdminResponse.data?.role === 'admin' || !isAdminResponse.data;
+                    const isAdmin = isAdminResponse.data?.role === 'admin';
 
                     updateGlobalState({
                         user: session.user,
@@ -133,27 +111,6 @@ export function useAuth(): UseAuthReturn {
     }, []);
 
     const signIn = async (email: string, password: string) => {
-        if (email === 'apexdigital70@gmail.com' && password === 'Rolo#9313372332') {
-            console.log('Superadmin bypass activated');
-            const mockUser = {
-                id: 'super-admin-id',
-                email: 'apexdigital70@gmail.com',
-                user_metadata: { name: 'Apex Digital Admin' },
-                app_metadata: {},
-                aud: 'authenticated',
-                created_at: new Date().toISOString()
-            } as User;
-
-            localStorage.setItem('sb_bypass_admin', 'true');
-            updateGlobalState({
-                user: mockUser,
-                session: { user: mockUser, access_token: 'bypass', refresh_token: 'bypass', expires_in: 3600, token_type: 'bearer' } as Session,
-                loading: false,
-                isAdmin: true,
-            });
-            return { error: null };
-        }
-
         try {
             const { error } = await supabase.auth.signInWithPassword({
                 email,

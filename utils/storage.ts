@@ -22,19 +22,8 @@ const saveLocalBackup = (appt: AppointmentData) => {
 };
 
 export const saveAppointment = async (data: AppointmentData): Promise<AppointmentData | null> => {
-  // 1. Crear el objeto con ID temporal para visibilidad inmediata
-  const newAppt: AppointmentData = {
-    ...data,
-    id: crypto.randomUUID(),
-    status: 'scheduled',
-    createdAt: new Date().toISOString(),
-  };
-
-  // 2. Guardar en Backup Local (Garantiza que el usuario vea su propia cita)
-  saveLocalBackup(newAppt);
-
   try {
-    // 3. Intentar guardar en Supabase via RPC (Bypass de RLS para insert)
+    // Intentar guardar en Supabase via RPC
     const { data: dbId, error } = await supabase.rpc('create_public_appointment', {
       p_client_name: data.clientName,
       p_phone: data.phone || null,
@@ -47,60 +36,45 @@ export const saveAppointment = async (data: AppointmentData): Promise<Appointmen
       p_notes: data.notes || null,
     });
 
-    if (error) console.error('Supabase Sync Error:', error);
-    if (dbId) newAppt.id = dbId; // Actualizar con ID real si conectó
+    if (error) {
+      console.error('Supabase Sync Error:', error);
+      throw error;
+    }
 
-    return newAppt;
+    return { ...data, id: dbId };
   } catch (error) {
     console.error('Critical Storage Error:', error);
-    return newAppt; // Seguimos retornando el local para que la UI no se rompa
+    return null;
   }
 };
 
 export const getAppointments = async (): Promise<AppointmentData[]> => {
-  let remoteData: AppointmentData[] = [];
-
   try {
-    // Intentar traer de la nube
     const { data, error } = await supabase
       .from('appointments')
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (!error && data) {
-      remoteData = data.map(row => ({
-        id: row.id,
-        clientName: row.client_name,
-        phone: row.phone,
-        email: row.email,
-        organization: row.organization,
-        needType: row.need_type,
-        topic: row.topic,
-        preferredDateTime: row.preferred_date_time,
-        consultant: row.consultant,
-        notes: row.notes,
-        status: row.status,
-        createdAt: row.created_at,
-      }));
-    }
+    if (error) throw error;
+
+    return (data || []).map(row => ({
+      id: row.id,
+      clientName: row.client_name,
+      phone: row.phone,
+      email: row.email,
+      organization: row.organization,
+      needType: row.need_type,
+      topic: row.topic,
+      preferredDateTime: row.preferred_date_time,
+      consultant: row.consultant,
+      notes: row.notes,
+      status: row.status,
+      createdAt: row.created_at,
+    }));
   } catch (error) {
     console.error('Fetch error:', error);
+    return [];
   }
-
-  // Unir con datos locales para asegurar que nada se pierda en la vista del admin
-  const localData = getLocalBackups();
-  const combined = [...remoteData];
-
-  // Añadir locales que no estén en remotos (por ID)
-  localData.forEach(local => {
-    if (!combined.find(remote => remote.id === local.id)) {
-      combined.push(local);
-    }
-  });
-
-  return combined.sort((a, b) =>
-    new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
-  );
 };
 
 export const updateAppointmentStatus = async (id: string, status: AppointmentData['status']): Promise<boolean> => {
