@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Search, Sparkles, CheckCircle2 } from 'lucide-react';
+import { X, Plus, Search, Sparkles, CheckCircle2, Mail, Phone } from 'lucide-react';
 import { AppointmentData } from '../../types';
 
 interface DayModalProps {
@@ -17,6 +17,7 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
     const [formData, setFormData] = useState<Partial<AppointmentData>>({
         clientName: '',
         email: '',
+        phone: '',
         organization: '',
         needType: 'Diagnóstico Organizacional HPO',
         topic: '',
@@ -72,6 +73,7 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
                 setFormData({
                     clientName: '',
                     email: '',
+                    phone: '',
                     organization: '',
                     needType: 'Diagnóstico Organizacional HPO',
                     topic: '',
@@ -108,6 +110,10 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
                                     <span className="text-accent truncate">{appt.organization || 'ORG'}</span>
                                     <span>•</span>
                                     <span className="truncate">{appt.topic || 'Sin tema'}</span>
+                                </div>
+                                <div className="flex gap-3 items-center text-[6px] font-black uppercase tracking-[0.15em] text-white/20 mt-1">
+                                    {appt.email && <span className="flex items-center gap-1"><Mail size={6} className="text-primary" /> {appt.email}</span>}
+                                    {appt.phone && <span className="flex items-center gap-1"><Phone size={6} className="text-secondary" /> {appt.phone}</span>}
                                 </div>
                             </div>
                             <button onClick={(e) => { e.stopPropagation(); onViewLead(appt); }} className="w-7 h-7 glass rounded-lg flex items-center justify-center text-accent ml-2 shrink-0 hover:bg-accent hover:text-dark transition-colors"><Search size={12} /></button>
@@ -151,6 +157,21 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
                                 placeholder="Tema / Requerimiento"
                                 value={formData.topic}
                                 onChange={e => setFormData({ ...formData, topic: e.target.value })}
+                            />
+                            <input
+                                required
+                                type="email"
+                                className="w-full h-10 px-4 bg-white/5 border border-white/10 rounded-lg text-white text-xs font-bold outline-none focus:border-accent/40"
+                                placeholder="Correo Coreo Electrónico"
+                                value={formData.email}
+                                onChange={e => setFormData({ ...formData, email: e.target.value })}
+                            />
+                            <input
+                                required
+                                className="w-full h-10 px-4 bg-white/5 border border-white/10 rounded-lg text-white text-xs font-bold outline-none focus:border-accent/40"
+                                placeholder="Teléfono de Contacto"
+                                value={formData.phone}
+                                onChange={e => setFormData({ ...formData, phone: e.target.value })}
                             />
                             <button
                                 type="submit"

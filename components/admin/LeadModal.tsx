@@ -1,6 +1,7 @@
-import React from 'react';
-import { X, User, Briefcase, Mail, Phone, Calendar, Sparkles, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, User, Briefcase, Mail, Phone, Calendar, Sparkles, CheckCircle, Save, Loader2 } from 'lucide-react';
 import { AppointmentData } from '../../types';
+import { supabase } from '../../lib/supabase';
 
 interface LeadModalProps {
     lead: AppointmentData;
@@ -9,6 +10,27 @@ interface LeadModalProps {
 }
 
 const LeadModal: React.FC<LeadModalProps> = ({ lead, onClose, onStatusChange }) => {
+    const [notes, setNotes] = useState(lead.notes || '');
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleSaveNotes = async () => {
+        setIsSaving(true);
+        try {
+            const { error } = await supabase
+                .from('appointments')
+                .update({ notes })
+                .eq('id', lead.id);
+
+            if (error) throw error;
+            alert("Notas actualizadas correctamente.");
+        } catch (error) {
+            console.error("Save notes error:", error);
+            alert("Error al guardar notas.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     return (
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-dark/98 backdrop-blur-2xl p-4 lg:p-12 animate-in fade-in duration-500">
             <div className="bg-white/5 border border-white/10 rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-zoom-in">
@@ -96,11 +118,23 @@ const LeadModal: React.FC<LeadModalProps> = ({ lead, onClose, onStatusChange }) 
                         </div>
 
                         <div className="space-y-6">
-                            <h4 className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] border-b border-white/5 pb-4 italic">Notas de Diagnóstico Inicial</h4>
-                            <div className="bg-white/[0.03] rounded-3xl p-6 border border-white/5 min-h-[140px]">
-                                <p className="text-sm font-medium text-white/60 leading-relaxed italic">
-                                    {lead.notes || "El lead no ha dejado comentarios adicionales. Se requiere auditoría en la primera sesión."}
-                                </p>
+                            <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                                <h4 className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] italic">Seguimiento de Eventos / CRM</h4>
+                                <button
+                                    onClick={handleSaveNotes}
+                                    disabled={isSaving}
+                                    className="flex items-center gap-2 text-[9px] font-black text-accent hover:text-white transition-colors uppercase tracking-widest disabled:opacity-50"
+                                >
+                                    {isSaving ? <Loader2 size={10} className="animate-spin" /> : <Save size={10} />} Guardar Bitácora
+                                </button>
+                            </div>
+                            <div className="bg-white/[0.03] rounded-3xl p-6 border border-white/5 min-h-[140px] focus-within:border-accent/30 transition-all">
+                                <textarea
+                                    className="w-full bg-transparent border-none outline-none text-sm font-medium text-white/60 leading-relaxed italic resize-none scrollbar-none min-h-[100px]"
+                                    placeholder="Registre aquí el seguimiento: llamadas, acuerdos, avance en el embudo..."
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                />
                             </div>
                         </div>
                     </div>
@@ -109,8 +143,8 @@ const LeadModal: React.FC<LeadModalProps> = ({ lead, onClose, onStatusChange }) 
                 {/* Modal Footer (Actions) */}
                 <div className="p-12 relative z-10 border-t border-white/5 bg-white/[0.02] flex justify-between items-center">
                     <span className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] italic ${lead.status === 'new' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
-                        lead.status === 'scheduled' ? 'bg-secondary/20 text-secondary border border-secondary/30' :
-                            'bg-white/5 text-white/30 border border-white/10'
+                            lead.status === 'scheduled' ? 'bg-secondary/20 text-secondary border border-secondary/30' :
+                                'bg-white/5 text-white/30 border border-white/10'
                         }`}>
                         Estado: {lead.status || 'NEW'}
                     </span>
