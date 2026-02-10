@@ -19,7 +19,7 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
         email: '',
         phone: '',
         organization: '',
-        needType: 'Diagnóstico Organizacional HPO',
+        needType: 'Diagnóstico Organizacional HDO',
         topic: '',
         notes: 'Agendado manualmente por Admin'
     });
@@ -75,7 +75,7 @@ const DayModal: React.FC<DayModalProps> = ({ day, month, appointments, onClose, 
                     email: '',
                     phone: '',
                     organization: '',
-                    needType: 'Diagnóstico Organizacional HPO',
+                    needType: 'Diagnóstico Organizacional HDO',
                     topic: '',
                     notes: 'Agendado manualmente por Admin'
                 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, BarChart2, Target, Briefcase, Globe, Users, BookOpen, Smile, Award } from 'lucide-react';
-import { Service, CaseStudy, FaqItem } from './types';
+import { Service, CaseStudy, TeamMember, FaqItem } from './types';
 
 export const NAV_LINKS = [
   { name: 'Inicio', href: '#hero' },
@@ -14,10 +14,10 @@ export const NAV_LINKS = [
 
 export const SERVICES: Service[] = [
   {
-    id: 'hpo',
-    title: 'HPO - Diagnóstico Organizacional',
+    id: 'hdo',
+    title: 'HDO - Diagnóstico Organizacional',
     icon: <Search className="w-10 h-10 text-primary" />,
-    description: 'Evaluamos la salud organizacional con nuestra metodología propietaria HPO, refinada en 47 organizaciones.',
+    description: 'Evaluamos la salud organizacional con nuestra metodología propietaria HDO, refinada en 47 organizaciones.',
     target: ['ONGs sin metas claras', 'Alta rotación', 'Problemas de coordinación'],
     process: ['Revisión documental', 'Talleres participativos', 'Análisis FODA', 'Plan de acción'],
     deliverables: ['Informe diagnóstico', 'Dashboard indicadores', 'Plan de acción', 'Presentación ejecutiva'],
@@ -56,7 +56,7 @@ export const CASES: CaseStudy[] = [
     solution: ['Adaptación pedagógica', 'Traducción especializada', 'Capacitación a 350+ docentes'],
     results: ['12 centros equipados', '40% mejora en graduación', '2.3x incremento en empleabilidad'],
     testimonial: {
-      quote: "CONECTA no solo tradujo materiales, transformó nuestro modelo pedagógico.",
+      quote: "COONECTA no solo tradujo materiales, transformó nuestro modelo pedagógico.",
       author: "Director Regional Fe y Alegría África"
     }
   },
@@ -96,6 +96,33 @@ export const CASES: CaseStudy[] = [
   }
 ];
 
+export const TEAM: TeamMember[] = [
+  {
+    name: "Bernarda Sarué Pereira",
+    role: "Directora Ejecutiva",
+    image: "/bernarda-sarue.png",
+    bio: ["Socióloga, Máster en Educación", "20 años de experiencia", "Especialista en Evaluación de Impacto"]
+  },
+  {
+    name: "Dr. Gustavo Gottret",
+    role: "Consultor Senior Educación",
+    image: "/gustavo-gottret.png",
+    bio: ["Doctor en Psicología Pedagógica", "25+ años en sistemas educativos", "Experiencia global"]
+  },
+  {
+    name: "Dra. Patricia Politi",
+    role: "Especialista en Evaluación T. Pedagógica",
+    image: "/patricia-politi.png",
+    bio: ["Especialista en Evaluación de Impacto Social", "Experta en metodologías cualitativas", "Investigadora Senior"]
+  },
+  {
+    name: "Dr. Limbert Ayarde",
+    role: "Consultor Políticas Públicas",
+    image: "/limbert-ayarde.png",
+    bio: ["Doctor en Ciencias Empresariales", "Ex-asesor gubernamental", "Analista de datos públicos"]
+  }
+];
+
 export const FAQS: FaqItem[] = [
   {
     question: "¿Cuál es el costo de la consulta inicial?",
@@ -116,14 +143,14 @@ export const FAQS: FaqItem[] = [
 ];
 
 export const SYSTEM_INSTRUCTION = `
-Eres Victoria, asistente virtual de CONECTA Consultores, una consultora de impacto social en Bolivia.
+Eres Victoria, asistente virtual de COONECTA Consultores, una consultora de impacto social en Bolivia.
 TU OBJETIVO: Cualificar leads y agendar una consulta gratuita de 30 minutos.
 PERSONALIDAD: Profesional, cálida, experta en ONGs y desarrollo social.
-CONOCIMIENTOS: M&E, Teoría del Cambio, HPO, ESG.
+CONOCIMIENTOS: M&E, Teoría del Cambio, HDO, ESG.
 
 FLUJO DE CONVERSACIÓN:
 1. Saludo inicial (ya realizado por el sistema, continúa la charla).
-2. Escucha activa: Identifica la necesidad (Evaluación, Diagnóstico HPO, Diseño de Proyectos).
+2. Escucha activa: Identifica la necesidad (Evaluación, Diagnóstico HDO, Diseño de Proyectos).
 3. Cualificación: Pregunta nombre, organización, **correo electrónico y teléfono** (INDISPENSABLES).
 4. Agendamiento: Propón horarios (ej. Mañana 10am, Jueves 3pm).
 5. Cierre: Llama a la función 'scheduleAppointment'.

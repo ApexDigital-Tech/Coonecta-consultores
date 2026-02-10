@@ -110,20 +110,20 @@ const App = () => {
       {view !== 'admin' && <ConectaAI />}
 
       {/* Navigation */}
-      <nav className="fixed w-full z-40 bg-white/70 backdrop-blur-xl border-b border-white/20 transition-all duration-300">
+      <nav className="fixed w-full z-40 bg-dark/20 backdrop-blur-md border-b border-white/5 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex justify-between items-center h-20 md:h-24">
+          <div className="flex justify-between items-center h-16 md:h-20">
             <div className="flex-shrink-0 flex items-center">
               <a href="#hero" onClick={(e) => handleNavClick(e, '#hero')} className="flex items-center group cursor-pointer">
                 {!logoError ? (
                   <img
                     src="/conecta-logo.png"
-                    alt="CONECTA"
-                    className="h-10 md:h-14 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+                    alt="COONECTA"
+                    className="h-8 md:h-10 w-auto object-contain transition-transform duration-500 group-hover:scale-105 brightness-0 invert"
                     onError={() => setLogoError(true)}
                   />
                 ) : (
-                  <span className="text-2xl font-black text-primary tracking-tighter">CONECTA</span>
+                  <span className="text-xl md:text-2xl font-black text-white tracking-tighter italic">COONECTA</span>
                 )}
               </a>
             </div>
@@ -134,7 +134,7 @@ const App = () => {
                     key={link.name}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-gray-600 hover:text-primary transition-all px-1 py-2 text-sm font-black uppercase tracking-widest cursor-pointer relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full"
+                    className="text-white/60 hover:text-accent transition-all px-1 py-1 text-[11px] font-black uppercase tracking-[0.2em] cursor-pointer relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-accent after:transition-all hover:after:w-full"
                   >
                     {link.name}
                   </a>
@@ -142,7 +142,7 @@ const App = () => {
                 <a
                   href="#contact"
                   onClick={(e) => handleNavClick(e, '#contact')}
-                  className="bg-primary text-white px-8 py-3 rounded-full font-black text-sm uppercase tracking-widest hover:bg-primary-dark transition-all shadow-premium hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                  className="bg-accent text-dark px-6 py-2.5 rounded-full font-black text-[11px] uppercase tracking-widest hover:bg-white transition-all shadow-premium hover:shadow-xl hover:-translate-y-0.5 cursor-pointer italic"
                 >
                   Agenda Gratis
                 </a>
@@ -159,25 +159,32 @@ const App = () => {
           </div>
         </div>
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 p-6 animate-in slide-in-from-top-2 duration-300">
-            <div className="flex flex-col space-y-4">
-              {NAV_LINKS.map((link) => (
+          <div className="lg:hidden fixed inset-0 z-[60] bg-dark/95 backdrop-blur-2xl animate-in fade-in duration-300">
+            <div className="flex flex-col h-full">
+              <div className="p-6 flex justify-end">
+                <button onClick={() => setMobileMenuOpen(false)} className="w-12 h-12 glass rounded-full flex items-center justify-center text-white">
+                  <X size={28} />
+                </button>
+              </div>
+              <div className="flex-1 flex flex-col items-center justify-center space-y-8 px-6 text-center">
+                {NAV_LINKS.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="text-2xl font-black uppercase tracking-[0.3em] text-white/50 hover:text-accent transition-all animate-slide-up"
+                    onClick={(e) => handleNavClick(e, link.href)}
+                  >
+                    {link.name}
+                  </a>
+                ))}
                 <a
-                  key={link.name}
-                  href={link.href}
-                  className="block px-4 py-3 rounded-2xl text-base font-black uppercase tracking-widest text-gray-700 hover:text-primary hover:bg-primary/5 transition-all text-center"
-                  onClick={(e) => handleNavClick(e, link.href)}
+                  href="#contact"
+                  onClick={(e) => handleNavClick(e, '#contact')}
+                  className="bg-accent text-white px-10 py-5 rounded-2xl font-black uppercase tracking-[0.2em] shadow-2xl animate-zoom-in"
                 >
-                  {link.name}
+                  Agenda Gratis
                 </a>
-              ))}
-              <a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, '#contact')}
-                className="bg-primary text-white py-4 rounded-2xl font-black uppercase tracking-widest text-center shadow-lg"
-              >
-                Agenda Gratis
-              </a>
+              </div>
             </div>
           </div>
         )}
@@ -211,8 +218,8 @@ const App = () => {
               stat: "Mejora operativa urgente"
             }
           ].map((item, idx) => (
-            <div key={idx} className="group bg-white p-10 rounded-[2.5rem] shadow-premium hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-100 flex flex-col h-full animate-zoom-in">
-              <div className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-8 shadow-xl transition-transform duration-500 group-hover:rotate-6`}>
+            <div key={idx} className="group bg-white p-8 rounded-2xl shadow-premium hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 flex flex-col h-full animate-zoom-in">
+              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6 shadow-xl transition-transform duration-500 group-hover:rotate-6`}>
                 {item.icon}
               </div>
               <h3 className="text-2xl font-black mb-4 text-dark italic">{item.title}</h3>
@@ -229,13 +236,13 @@ const App = () => {
       <Section id="services" title="Nuestros Pilares" subtitle="Estrategias de intervención diseñadas para resultados de alto nivel técnico.">
         <div className="grid lg:grid-cols-3 gap-12">
           {SERVICES.map((service) => (
-            <div key={service.id} className="flex flex-col h-full bg-white border border-gray-100 rounded-[3rem] overflow-hidden hover:border-primary/20 transition-all duration-500 group shadow-premium hover:shadow-2xl animate-zoom-in">
-              <div className="p-10 flex-grow">
-                <div className="mb-8 p-5 bg-pale rounded-[2rem] w-24 h-24 flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-500 transform group-hover:scale-110">
+            <div key={service.id} className="flex flex-col h-full bg-white border border-gray-100 rounded-[2rem] overflow-hidden hover:border-primary/20 transition-all duration-500 group shadow-premium hover:shadow-2xl animate-zoom-in">
+              <div className="p-8 flex-grow">
+                <div className="mb-6 p-4 bg-pale rounded-2xl w-20 h-20 flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-500 transform group-hover:scale-110">
                   {service.icon}
                 </div>
-                <h3 className="text-3xl font-black mb-6 text-primary tracking-tighter italic">{service.title}</h3>
-                <p className="text-gray-500 mb-8 font-medium leading-relaxed">{service.description}</p>
+                <h3 className="text-2xl font-black mb-4 text-primary tracking-tighter italic">{service.title}</h3>
+                <p className="text-gray-500 mb-6 font-medium leading-relaxed text-sm">{service.description}</p>
                 <div className="space-y-4 mb-2">
                   {service.process.slice(0, 3).map((step, i) => (
                     <div key={i} className="flex items-center text-sm font-bold text-gray-400 group-hover:text-primary transition-colors">
@@ -254,10 +261,10 @@ const App = () => {
         </div>
       </Section>
 
-      <Section id="methodology" title="Metodología HPO" subtitle="18 años de refinamiento. Evaluamos la salud de tu impacto desde la raíz." dark>
+      <Section id="methodology" title="Metodología HDO" subtitle="18 años de refinamiento. Evaluamos la salud de tu impacto desde la raíz." dark>
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div className="animate-fade-in-up">
-            <h3 className="text-3xl font-black text-accent mb-10 italic uppercase tracking-widest">¿Qué medimos en HPO?</h3>
+            <h3 className="text-2xl md:text-3xl font-black text-accent mb-10 italic uppercase tracking-widest leading-tight">¿Qué medimos en HDO?</h3>
             <div className="space-y-10">
               {[
                 { title: "Dimensión Estratégica", desc: "Alineación de visión, gobernanza y impacto proyectado.", color: "bg-primary" },
@@ -279,21 +286,21 @@ const App = () => {
           <div className="relative animate-zoom-in">
             <div className="absolute inset-0 mesh-gradient opacity-20 blur-3xl" />
             <div className="relative grid grid-cols-2 gap-6 scale-90 md:scale-100">
-              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center shadow-2xl transition-transform hover:-translate-y-4 hover:bg-white/10">
-                <span className="text-5xl block mb-4">🎯</span>
-                <span className="font-black text-white uppercase tracking-widest text-[12px]">Estrategia</span>
+              <div className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl border border-white/10 text-center shadow-2xl transition-transform hover:-translate-y-2 hover:bg-white/10">
+                <span className="text-4xl block mb-3">🎯</span>
+                <span className="font-black text-white uppercase tracking-widest text-[10px]">Estrategia</span>
               </div>
-              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center shadow-2xl transition-transform translate-y-12 hover:-translate-y-4 hover:bg-white/10">
-                <span className="text-5xl block mb-4">⚙️</span>
-                <span className="font-black text-white uppercase tracking-widest text-[12px]">Operaciones</span>
+              <div className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl border border-white/10 text-center shadow-2xl transition-transform translate-y-8 hover:-translate-y-2 hover:bg-white/10">
+                <span className="text-4xl block mb-3">⚙️</span>
+                <span className="font-black text-white uppercase tracking-widest text-[10px]">Operaciones</span>
               </div>
-              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center shadow-2xl transition-transform -translate-y-8 hover:-translate-y-4 hover:bg-white/10">
-                <span className="text-5xl block mb-4">👥</span>
-                <span className="font-black text-white uppercase tracking-widest text-[12px]">Personas</span>
+              <div className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl border border-white/10 text-center shadow-2xl transition-transform -translate-y-6 hover:-translate-y-2 hover:bg-white/10">
+                <span className="text-4xl block mb-3">👥</span>
+                <span className="font-black text-white uppercase tracking-widest text-[10px]">Personas</span>
               </div>
-              <div className="bg-accent/20 backdrop-blur-xl p-8 rounded-[2.5rem] border border-accent/30 text-center shadow-2xl transition-transform translate-y-4 hover:-translate-y-4 hover:bg-white/10">
-                <span className="text-5xl block mb-4 text-accent">🚀</span>
-                <span className="font-black text-accent uppercase tracking-widest text-[12px]">Impacto</span>
+              <div className="bg-accent/20 backdrop-blur-xl p-6 rounded-2xl border border-accent/30 text-center shadow-2xl transition-transform translate-y-4 hover:-translate-y-2 hover:bg-white/10">
+                <span className="text-4xl block mb-3 text-accent">🚀</span>
+                <span className="font-black text-accent uppercase tracking-widest text-[10px]">Impacto</span>
               </div>
             </div>
           </div>
@@ -303,7 +310,7 @@ const App = () => {
       <Section id="cases" title="Evidencia de Éxito" subtitle="Resultados reales en los contextos más desafiantes del mundo.">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {CASES.map((study) => (
-            <div key={study.id} className="bg-white p-8 rounded-[2.5rem] shadow-premium border border-gray-50 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full animate-zoom-in">
+            <div key={study.id} className="bg-white p-6 rounded-2xl shadow-premium border border-gray-50 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full animate-zoom-in">
               <div className="text-[10px] font-black text-secondary uppercase tracking-[0.4em] mb-4 bg-secondary/5 px-4 py-1.5 rounded-full inline-block self-start border border-secondary/10">{study.location}</div>
               <h3 className="text-xl font-black text-dark mb-6 leading-tight flex-grow italic">{study.title}</h3>
               <div className="space-y-3 pt-6 border-t border-gray-100">
@@ -327,7 +334,7 @@ const App = () => {
       <Section id="team" title="Nuestros Expertos" subtitle="Lideramos con rigor académico y experiencia en campo." className="bg-pale font-display">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           {TEAM.map((member, idx) => (
-            <div key={idx} className="bg-white rounded-[3rem] overflow-hidden shadow-premium group hover:shadow-2xl transition-all duration-500 animate-zoom-in">
+            <div key={idx} className="bg-white rounded-2xl overflow-hidden shadow-premium group hover:shadow-2xl transition-all duration-500 animate-zoom-in">
               <div className="relative h-72 overflow-hidden">
                 <img
                   src={member.image}
@@ -336,9 +343,9 @@ const App = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
               </div>
-              <div className="p-10 text-center relative">
-                <h3 className="font-black text-xl text-dark tracking-tighter mb-2 italic">{member.name}</h3>
-                <p className="text-sm text-secondary font-black uppercase tracking-widest mb-6">{member.role}</p>
+              <div className="p-8 text-center relative">
+                <h3 className="font-black text-lg text-dark tracking-tighter mb-1 italic">{member.name}</h3>
+                <p className="text-[10px] text-secondary font-black uppercase tracking-widest mb-4">{member.role}</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {member.bio.slice(0, 2).map((b, i) => (
                     <span key={i} className="text-[10px] bg-gray-50 text-gray-400 px-3 py-1.5 rounded-full font-black uppercase tracking-widest border border-gray-100">{b}</span>
@@ -380,7 +387,7 @@ const App = () => {
                 <input type="text" className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl px-6 font-bold text-white outline-none focus:ring-4 ring-accent/20 placeholder:text-white/20 transition-all shadow-inner-premium" placeholder="Nombre completo" />
                 <input type="email" className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl px-6 font-bold text-white outline-none focus:ring-4 ring-accent/20 placeholder:text-white/20 transition-all shadow-inner-premium" placeholder="Email institucional" />
                 <select className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl px-6 font-bold text-white outline-none focus:ring-4 ring-accent/20 transition-all shadow-inner-premium appearance-none">
-                  <option className="bg-dark">Diagnóstico HPO</option>
+                  <option className="bg-dark">Diagnóstico HDO</option>
                   <option className="bg-dark">Evaluación de Impacto</option>
                   <option className="bg-dark">Estrategia Social</option>
                 </select>
@@ -393,40 +400,31 @@ const App = () => {
         </div>
       </Section>
 
-      <footer className="bg-dark text-white/30 py-20 px-6 border-t border-white/5 font-display">
+      <footer className="bg-dark text-white/30 py-16 md:py-24 px-6 border-t border-white/5 font-display">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-10">
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <div className="mb-6 h-12">
+              <div className="mb-6 h-10 md:h-12">
                 {!logoError ? (
-                  <img src="/conecta-logo.png" alt="CONECTA" className="h-full w-auto opacity-30 grayscale brightness-200" />
+                  <img src="/conecta-logo.png" alt="COONECTA" className="h-full w-auto opacity-30 grayscale brightness-200" />
                 ) : (
-                  <span className="text-3xl font-black text-white/20 tracking-tighter">CONECTA</span>
+                  <span className="text-2xl md:text-3xl font-black text-white/20 tracking-tighter italic">COONECTA</span>
                 )}
               </div>
-              <p className="max-w-sm font-bold italic tracking-tighter leading-tight">Transformando el ADN de las organizaciones sociales desde 2004.</p>
+              <p className="max-w-sm font-bold italic tracking-tighter leading-tight text-xs md:text-sm">Transformando el ADN de las organizaciones sociales desde 2004.</p>
             </div>
-            <div className="flex flex-wrap justify-center gap-10 font-black uppercase tracking-[0.3em] text-[10px]">
-              <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-              <a href="#" className="hover:text-white transition-colors">Facebook</a>
-              <a href="#" className="hover:text-white transition-colors">YouTube</a>
-            </div>
+            {/* ... */}
           </div>
-          <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-black uppercase tracking-widest gap-4">
-            <div className="flex items-center gap-6">
-              <div className="flex gap-8">
-                <a href="#" className="hover:text-white transition-colors">Privacidad</a>
-                <a href="#" className="hover:text-white transition-colors">Términos</a>
-              </div>
+          <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[9px] md:text-[10px] font-black uppercase tracking-widest gap-6">
+            <div className="flex flex-col md:flex-row items-center gap-6">
               <button
                 onClick={() => setView('login')}
-                className="flex items-center gap-2 text-white/10 hover:text-white/50 transition-all cursor-pointer group"
+                className="text-white/20 hover:text-accent transition-colors"
               >
-                <Lock size={12} className="opacity-50 group-hover:opacity-100" />
-                <span className="text-[10px] font-black uppercase tracking-widest bg-white/5 px-2 py-1 rounded">Admin</span>
+                Acceso Consultores
               </button>
             </div>
-            <p>© 2026 CONECTA Consultores en Impacto Social. Todos los derechos reservados.</p>
+            <p className="text-center md:text-right">© 2026 COONECTA Consultores en Impacto Social. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

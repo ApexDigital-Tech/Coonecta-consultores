@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAppointments, updateAppointmentStatus, saveAppointment } from '../utils/storage';
 import { AppointmentData } from '../types';
-import { Bell, Loader2, Sparkles } from 'lucide-react';
+import { Bell, Loader2, Sparkles, Calendar, Users, LogOut } from 'lucide-react';
 
 // Modulares del Admin
 import Sidebar from './admin/Sidebar';
@@ -141,6 +141,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     />
                 )}
             </main>
+
+            {/* BARRA DE NAVEGACIÓN MÓVIL - SOLO ADMIN */}
+            <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-dark/80 backdrop-blur-2xl border-t border-white/5 flex justify-around p-3 z-[60]">
+                <button
+                    onClick={() => setView('calendar')}
+                    className={`flex flex-col items-center p-2 rounded-xl transition-all ${view === 'calendar' ? 'text-accent' : 'text-white/20'}`}
+                >
+                    <Calendar size={20} />
+                    <span className="text-[7px] font-black uppercase mt-1 tracking-widest">Agenda</span>
+                </button>
+                <button
+                    onClick={() => setView('list')}
+                    className={`flex flex-col items-center p-2 rounded-xl transition-all ${view === 'list' ? 'text-accent' : 'text-white/20'}`}
+                >
+                    <Users size={20} />
+                    <span className="text-[7px] font-black uppercase mt-1 tracking-widest">Leads</span>
+                </button>
+                <button
+                    onClick={onLogout}
+                    className="flex flex-col items-center p-2 rounded-xl text-red-500/50"
+                >
+                    <LogOut size={20} />
+                    <span className="text-[7px] font-black uppercase mt-1 tracking-widest">Salir</span>
+                </button>
+            </div>
         </div>
     );
 };

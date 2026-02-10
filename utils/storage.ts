@@ -2,11 +2,11 @@ import { supabase } from '../lib/supabase';
 import { AppointmentData } from '../types';
 
 /**
- * MOTOR DE ALMACENAMIENTO HÍBRIDO CONECTA 2026
+ * MOTOR DE ALMACENAMIENTO HÍBRIDO COONECTA 2026
  * Garantiza que las citas se vean incluso si hay problemas de RLS en Supabase.
  */
 
-const LOCAL_STORAGE_KEY = 'conecta_appointments_backup';
+const LOCAL_STORAGE_KEY = 'coonecta_appointments_backup';
 
 // Auxiliar para obtener backups locales
 const getLocalBackups = (): AppointmentData[] => {

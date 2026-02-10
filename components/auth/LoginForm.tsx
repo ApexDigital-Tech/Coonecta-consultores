@@ -76,11 +76,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSuccess }) => {
             <div className="glass-dark p-12 rounded-[3.5rem] shadow-premium w-full max-w-lg animate-zoom-in relative z-10 border border-white/10">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <div className="mb-10 p-8 glass rounded-[2.5rem] shadow-premium animate-float ring-1 ring-white/30 inline-block">
+                    <div className="mb-8 md:mb-10 p-6 md:p-8 glass rounded-[2.5rem] shadow-premium animate-float ring-1 ring-white/30 inline-block">
                         <img
                             src="/conecta-logo.png"
-                            alt="CONECTA"
-                            className="w-48 h-auto object-contain brightness-0 invert"
+                            alt="COONECTA"
+                            className="w-40 md:w-48 h-auto object-contain brightness-0 invert"
                         />
                     </div>
                     <h2 className="text-3xl font-black text-white tracking-tighter italic uppercase">
@@ -121,7 +121,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSuccess }) => {
                                     type="email"
                                     required
                                     className="w-full h-16 pl-14 pr-6 bg-white/5 border border-white/10 rounded-2xl text-white font-bold outline-none focus:ring-4 ring-accent/20 transition-all shadow-inner-premium placeholder:text-white/10"
-                                    placeholder="admin@conecta.org"
+                                    placeholder="admin@coonecta.org"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     autoComplete="email"
@@ -223,7 +223,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSuccess }) => {
                 {/* Footer */}
                 <div className="mt-12 pt-8 border-t border-white/5 text-center">
                     <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">
-                        SISTEMA DE SEGURIDAD CONECTA 2026
+                        SISTEMA DE SEGURIDAD COONECTA 2026
                     </p>
                 </div>
             </div>

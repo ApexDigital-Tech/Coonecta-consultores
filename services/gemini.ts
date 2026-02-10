@@ -10,7 +10,7 @@ export const appointmentTool: FunctionDeclaration = {
             phone: { type: Type.STRING, description: "Teléfono o celular de contacto (Indispensable)" },
             email: { type: Type.STRING, description: "Correo electrónico institucional (Indispensable)" },
             organization: { type: Type.STRING, description: "Nombre de la organización u ONG" },
-            needType: { type: Type.STRING, description: "Tipo de necesidad (HPO, Evaluación, Proyectos)" },
+            needType: { type: Type.STRING, description: "Tipo de necesidad (HDO, Evaluación, Proyectos)" },
             preferredDateTime: { type: Type.STRING, description: "Formato ISO 8601 (YYYY-MM-DD HH:mm) EJEMPLO: 2025-02-06 10:00" },
             consultant: { type: Type.STRING, description: "Nombre del consultor asignado (opcional, default Bernarda Sarué)" },
             notes: { type: Type.STRING, description: "Notas adicionales del contexto" },

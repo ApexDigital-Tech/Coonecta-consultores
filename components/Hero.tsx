@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Sparkles } from 'lucide-react';
 
 const Hero = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -44,30 +45,25 @@ const Hero = () => {
           transform: `translateY(${scrollProgress * -30}px)`
         }}
       >
-        {/* Floating Logo Container */}
-        <div className="mb-12 p-8 glass rounded-[2.5rem] shadow-premium animate-float ring-1 ring-white/30">
-          {!logoError ? (
-            <img
-              src="/conecta-logo.png"
-              alt="CONECTA Consultores"
-              className="w-72 md:w-[450px] h-auto object-contain drop-shadow-xl"
-              onError={() => setLogoError(true)}
-            />
-          ) : (
-            <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter text-shadow-premium">
-              CONECTA
-            </h1>
-          )}
+        {/* Premium Tagline Badge */}
+        <div className="mb-6 md:mb-8 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 glass rounded-full ring-1 ring-white/20 shadow-premium">
+            <Sparkles className="w-3 h-3 text-accent animate-pulse" />
+            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-white/80">
+              Consultores en Impacto Social
+            </span>
+          </div>
         </div>
 
-        <div className="space-y-6 animate-fade-in-up">
-          <p className="text-lg md:text-xl text-accent font-black uppercase tracking-[0.3em] text-shadow-premium">
-            Consultores en Impacto Social
-          </p>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl text-white max-w-4xl leading-[1.1] font-bold drop-shadow-2xl">
-            Transformamos organizaciones sociales en agentes de cambio <br />
-            <span className="text-secondary underline decoration-white/20 underline-offset-8">medible</span> y <span className="text-secondary underline decoration-white/20 underline-offset-8">sostenible</span>.
+        <div className="space-y-6 md:space-y-8 animate-fade-in-up">
+          <h2 className="text-3xl md:text-6xl lg:text-7xl text-white max-w-5xl leading-[1.1] md:leading-[1.05] font-black drop-shadow-2xl px-2 tracking-tighter italic">
+            Transformamos organizaciones sociales en agentes de cambio <br className="hidden md:block" />
+            <span className="text-accent underline decoration-white/10 underline-offset-[12px]">medible</span> y <span className="text-accent underline decoration-white/10 underline-offset-[12px]">sostenible</span>.
           </h2>
+
+          <p className="text-sm md:text-lg text-white/50 max-w-2xl mx-auto font-medium leading-relaxed">
+            Estrategias de intervención de alto nivel técnico para maximizar el retorno social de cada inversión.
+          </p>
         </div>
 
         <div
