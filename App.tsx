@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Hero from './components/Hero';
 import Section from './components/Section';
-import Patricia from './components/Patricia';
+import ConectaAI from './components/ConectaAI';
 import AdminDashboard from './components/AdminDashboard';
 import LoginForm from './components/auth/LoginForm';
 import { useAuth } from './hooks/useAuth';
@@ -99,38 +99,44 @@ const App = () => {
       );
     }
 
-    return <AdminDashboard onLogout={handleLogout} />;
+    return (
+      <>
+        <AdminDashboard onLogout={handleLogout} />
+        <ConectaAI />
+      </>
+    );
   }
 
   return (
     <div className="font-sans antialiased text-dark bg-gray-50">
+      <ConectaAI />
 
       {/* Navigation */}
-      <nav className="fixed w-full z-40 bg-white/95 backdrop-blur-sm shadow-sm transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-24">
+      <nav className="fixed w-full z-40 bg-white/70 backdrop-blur-xl border-b border-white/20 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="flex justify-between items-center h-20 md:h-24">
             <div className="flex-shrink-0 flex items-center">
               <a href="#hero" onClick={(e) => handleNavClick(e, '#hero')} className="flex items-center group cursor-pointer">
                 {!logoError ? (
                   <img
                     src="/conecta-logo.png"
                     alt="CONECTA"
-                    className="h-12 md:h-16 w-auto object-contain transition-transform group-hover:scale-105"
+                    className="h-10 md:h-14 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
                     onError={() => setLogoError(true)}
                   />
                 ) : (
-                  <span className="text-2xl font-bold text-primary tracking-tighter">CONECTA</span>
+                  <span className="text-2xl font-black text-primary tracking-tighter">CONECTA</span>
                 )}
               </a>
             </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
+            <div className="hidden lg:block">
+              <div className="ml-10 flex items-center space-x-10">
                 {NAV_LINKS.map((link) => (
                   <a
                     key={link.name}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-gray-600 hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                    className="text-gray-600 hover:text-primary transition-all px-1 py-2 text-sm font-black uppercase tracking-widest cursor-pointer relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full"
                   >
                     {link.name}
                   </a>
@@ -138,16 +144,16 @@ const App = () => {
                 <a
                   href="#contact"
                   onClick={(e) => handleNavClick(e, '#contact')}
-                  className="bg-secondary text-white px-5 py-2 rounded-full font-medium hover:bg-green-700 transition-colors shadow-md hover:shadow-lg cursor-pointer"
+                  className="bg-primary text-white px-8 py-3 rounded-full font-black text-sm uppercase tracking-widest hover:bg-primary-dark transition-all shadow-premium hover:shadow-xl hover:-translate-y-1 cursor-pointer"
                 >
                   Agenda Gratis
                 </a>
               </div>
             </div>
-            <div className="-mr-2 flex md:hidden">
+            <div className="-mr-2 flex lg:hidden">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                className="inline-flex items-center justify-center p-2 rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none"
               >
                 {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -155,60 +161,66 @@ const App = () => {
           </div>
         </div>
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-100 p-6 animate-in slide-in-from-top-2 duration-300">
+            <div className="flex flex-col space-y-4">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50"
+                  className="block px-4 py-3 rounded-2xl text-base font-black uppercase tracking-widest text-gray-700 hover:text-primary hover:bg-primary/5 transition-all text-center"
                   onClick={(e) => handleNavClick(e, link.href)}
                 >
                   {link.name}
                 </a>
               ))}
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, '#contact')}
+                className="bg-primary text-white py-4 rounded-2xl font-black uppercase tracking-widest text-center shadow-lg"
+              >
+                Agenda Gratis
+              </a>
             </div>
           </div>
         )}
       </nav>
 
       <Hero />
-      <Patricia />
 
       {/* SECTIONS */}
-      <Section id="challenges" title="Los Desafíos Críticos" subtitle="El 73% de los proyectos sociales no logra demostrar impacto medible." className="bg-pale">
-        <div className="grid md:grid-cols-3 gap-8">
+      <Section id="challenges" title="Desafíos de Impacto" subtitle="El 73% de los proyectos sociales no logra demostrar resultados medibles. Te ayudamos a cambiar esa estadística." className="bg-pale">
+        <div className="grid md:grid-cols-3 gap-10">
           {[
             {
               title: "Fragmentación",
               desc: "Esfuerzos aislados que duplican costos y reducen el alcance real.",
               icon: <Puzzle className="w-10 h-10 text-white" />,
-              color: "from-blue-500 to-blue-700",
+              color: "from-[#1B4F72] to-[#12344D]",
               stat: "68% sin alianzas efectivas"
             },
             {
               title: "Impacto Invisible",
-              desc: "Falta de evidencia rigurosa para convencer a donantes exigentes.",
+              desc: "Falta de evidencia rigurosa para convencer a donantes y stakeholders.",
               icon: <TrendingDown className="w-10 h-10 text-white" />,
-              color: "from-red-500 to-pink-600",
+              color: "from-[#229954] to-[#145A32]",
               stat: "73% sin medición clara"
             },
             {
               title: "Debilidad Interna",
-              desc: "Procesos obsoletos que frenan el crecimiento del equipo.",
+              desc: "Procesos obsoletos que frenan el crecimiento y el escalamiento.",
               icon: <ShieldAlert className="w-10 h-10 text-white" />,
-              color: "from-amber-400 to-orange-600",
-              stat: "Alta rotación de personal"
+              color: "from-[#D4AF37] to-[#B8860B]",
+              stat: "Mejora operativa urgente"
             }
           ].map((item, idx) => (
-            <div key={idx} className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-              <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-6 shadow-lg rotate-3 group-hover:rotate-6 transition-transform`}>
+            <div key={idx} className="group bg-white p-10 rounded-[2.5rem] shadow-premium hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-100 flex flex-col h-full animate-zoom-in">
+              <div className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-8 shadow-xl transition-transform duration-500 group-hover:rotate-6`}>
                 {item.icon}
               </div>
-              <h3 className="text-xl font-bold mb-3 text-dark">{item.title}</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">{item.desc}</p>
-              <div className="bg-gray-50 border border-gray-100 p-3 rounded-lg text-sm font-bold text-secondary flex items-center">
-                <span className="w-2 h-2 bg-secondary rounded-full mr-2"></span>
+              <h3 className="text-2xl font-black mb-4 text-dark italic">{item.title}</h3>
+              <p className="text-gray-500 mb-8 leading-relaxed font-medium flex-grow">{item.desc}</p>
+              <div className="bg-gray-50 border border-gray-100 p-4 rounded-2xl text-[12px] font-black text-primary flex items-center shadow-inner-premium uppercase tracking-widest">
+                <span className="w-2 h-2 bg-secondary rounded-full mr-3 animate-pulse"></span>
                 {item.stat}
               </div>
             </div>
@@ -216,252 +228,207 @@ const App = () => {
         </div>
       </Section>
 
-      <Section id="services" title="Nuestros 3 Pilares" subtitle="Soluciones integrales para transformar tu organización.">
-        <div className="grid lg:grid-cols-3 gap-10">
+      <Section id="services" title="Nuestros Pilares" subtitle="Estrategias de intervención diseñadas para resultados de alto nivel técnico.">
+        <div className="grid lg:grid-cols-3 gap-12">
           {SERVICES.map((service) => (
-            <div key={service.id} className="flex flex-col h-full bg-white border rounded-2xl overflow-hidden hover:border-secondary transition-colors group">
-              <div className="p-8 flex-grow">
-                <div className="mb-6 p-4 bg-gray-50 rounded-full w-20 h-20 flex items-center justify-center group-hover:bg-green-50 transition-colors">
+            <div key={service.id} className="flex flex-col h-full bg-white border border-gray-100 rounded-[3rem] overflow-hidden hover:border-primary/20 transition-all duration-500 group shadow-premium hover:shadow-2xl animate-zoom-in">
+              <div className="p-10 flex-grow">
+                <div className="mb-8 p-5 bg-pale rounded-[2rem] w-24 h-24 flex items-center justify-center group-hover:bg-primary/10 transition-colors duration-500 transform group-hover:scale-110">
                   {service.icon}
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-primary">{service.title}</h3>
-                <p className="text-gray-600 mb-6">{service.description}</p>
-                <ul className="space-y-2 mb-6">
+                <h3 className="text-3xl font-black mb-6 text-primary tracking-tighter italic">{service.title}</h3>
+                <p className="text-gray-500 mb-8 font-medium leading-relaxed">{service.description}</p>
+                <div className="space-y-4 mb-2">
                   {service.process.slice(0, 3).map((step, i) => (
-                    <li key={i} className="flex items-start text-sm text-gray-500">
-                      <CheckCircle size={16} className="text-secondary mr-2 mt-1 flex-shrink-0" />
+                    <div key={i} className="flex items-center text-sm font-bold text-gray-400 group-hover:text-primary transition-colors">
+                      <div className="w-1.5 h-1.5 bg-secondary rounded-full mr-3 group-hover:bg-primary transition-colors" />
                       {step}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="bg-gray-50 p-6 border-t">
-                <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Inversión Referencial</p>
-                <p className="text-xl font-bold text-dark">{service.price}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="methodology" title="Metodología HPO" subtitle="18 años de refinamiento. No solo diagnosticamos, transformamos." dark>
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h3 className="text-2xl font-bold text-accent mb-6">¿Qué evalúa HPO?</h3>
-            <div className="space-y-6">
-              {[
-                { title: "Dimensión Estratégica", desc: "Misión, visión, gobernanza y alineación." },
-                { title: "Dimensión Operativa", desc: "Procesos, eficiencia, recursos y calidad." },
-                { title: "Dimensión Humana", desc: "Clima, cultura, liderazgo y capacidades." },
-              ].map((dim, idx) => (
-                <div key={idx} className="flex">
-                  <div className="mr-4 mt-1 bg-white/10 p-2 rounded text-accent">
-                    <CheckCircle size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-white">{dim.title}</h4>
-                    <p className="text-gray-400">{dim.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-10 p-6 bg-white/5 rounded-lg border border-white/10">
-              <p className="text-gray-300 italic">
-                "El 85% de nuestros clientes HPO reportan mejoras medibles en desempeño financiero y social en menos de 6 meses."
-              </p>
-            </div>
-          </div>
-          <div className="relative">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-primary p-6 rounded-lg text-center transform translate-y-8 opacity-80 shadow-lg">
-                <span className="text-4xl block mb-2">🎯</span>
-                <span className="font-bold text-white">Estrategia</span>
-              </div>
-              <div className="bg-secondary p-6 rounded-lg text-center opacity-90 shadow-lg">
-                <span className="text-4xl block mb-2">⚙️</span>
-                <span className="font-bold text-white">Procesos</span>
-              </div>
-              <div className="bg-accent p-6 rounded-lg text-center opacity-90 shadow-lg">
-                <span className="text-4xl block mb-2">👥</span>
-                <span className="font-bold text-white">Personas</span>
-              </div>
-              <div className="bg-gray-800 p-6 rounded-lg text-center transform -translate-y-8 border border-white/20 shadow-lg">
-                <span className="text-4xl block mb-2">🚀</span>
-                <span className="font-bold text-white">Impacto</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="cases" title="Resultados Cuantificados" subtitle="Evidencia real de transformación.">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {CASES.map((study) => (
-            <div key={study.id} className="bg-white p-6 rounded-xl shadow border hover:shadow-lg transition-all flex flex-col">
-              <div className="text-xs font-bold text-secondary uppercase tracking-widest mb-2">{study.location}</div>
-              <h3 className="text-lg font-bold text-dark mb-4 leading-tight">{study.title}</h3>
-              <div className="flex-grow">
-                <p className="text-sm text-gray-500 mb-4 line-clamp-3">{study.challenge}</p>
-                <div className="space-y-2">
-                  {study.results.slice(0, 2).map((res, i) => (
-                    <div key={i} className="flex items-start text-xs font-medium text-green-700 bg-green-50 p-2 rounded">
-                      <span className="mr-2">📈</span> {res}
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="mt-6 pt-4 border-t text-xs text-gray-400">
-                Cliente: {study.client}
+              <div className="bg-gray-50/50 p-8 border-t border-gray-100 backdrop-blur-sm">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-2">Inversión Referencial</p>
+                <p className="text-2xl font-black text-dark italic">{service.price}</p>
               </div>
             </div>
           ))}
         </div>
-        <div className="text-center mt-12">
-          <button className="text-primary font-semibold hover:text-secondary underline underline-offset-4">
-            Ver todos los casos de éxito
-          </button>
+      </Section>
+
+      <Section id="methodology" title="Metodología HPO" subtitle="18 años de refinamiento. Evaluamos la salud de tu impacto desde la raíz." dark>
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          <div className="animate-fade-in-up">
+            <h3 className="text-3xl font-black text-accent mb-10 italic uppercase tracking-widest">¿Qué medimos en HPO?</h3>
+            <div className="space-y-10">
+              {[
+                { title: "Dimensión Estratégica", desc: "Alineación de visión, gobernanza y impacto proyectado.", color: "bg-primary" },
+                { title: "Dimensión Operativa", desc: "Eficiencia de procesos, recursos y estándares de calidad.", color: "bg-secondary" },
+                { title: "Dimensión Humana", desc: "Clima, cultura organizacional, liderazgo y capacidades críticas.", color: "bg-accent" },
+              ].map((dim, idx) => (
+                <div key={idx} className="flex group">
+                  <div className={`mr-6 mt-1 ${dim.color} p-3 rounded-2xl text-white shadow-xl transition-transform group-hover:scale-110`}>
+                    <CheckCircle size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-black text-white mb-2 italic">{dim.title}</h4>
+                    <p className="text-white/50 font-medium">{dim.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="relative animate-zoom-in">
+            <div className="absolute inset-0 mesh-gradient opacity-20 blur-3xl" />
+            <div className="relative grid grid-cols-2 gap-6 scale-90 md:scale-100">
+              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center shadow-2xl transition-transform hover:-translate-y-4 hover:bg-white/10">
+                <span className="text-5xl block mb-4">🎯</span>
+                <span className="font-black text-white uppercase tracking-widest text-[12px]">Estrategia</span>
+              </div>
+              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center shadow-2xl transition-transform translate-y-12 hover:-translate-y-4 hover:bg-white/10">
+                <span className="text-5xl block mb-4">⚙️</span>
+                <span className="font-black text-white uppercase tracking-widest text-[12px]">Operaciones</span>
+              </div>
+              <div className="bg-white/5 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 text-center shadow-2xl transition-transform -translate-y-8 hover:-translate-y-4 hover:bg-white/10">
+                <span className="text-5xl block mb-4">👥</span>
+                <span className="font-black text-white uppercase tracking-widest text-[12px]">Personas</span>
+              </div>
+              <div className="bg-accent/20 backdrop-blur-xl p-8 rounded-[2.5rem] border border-accent/30 text-center shadow-2xl transition-transform translate-y-4 hover:-translate-y-4 hover:bg-white/10">
+                <span className="text-5xl block mb-4 text-accent">🚀</span>
+                <span className="font-black text-accent uppercase tracking-widest text-[12px]">Impacto</span>
+              </div>
+            </div>
+          </div>
         </div>
       </Section>
 
-      <Section id="team" title="Expertos en Desarrollo" className="bg-pale">
+      <Section id="cases" title="Evidencia de Éxito" subtitle="Resultados reales en los contextos más desafiantes del mundo.">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {CASES.map((study) => (
+            <div key={study.id} className="bg-white p-8 rounded-[2.5rem] shadow-premium border border-gray-50 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full animate-zoom-in">
+              <div className="text-[10px] font-black text-secondary uppercase tracking-[0.4em] mb-4 bg-secondary/5 px-4 py-1.5 rounded-full inline-block self-start border border-secondary/10">{study.location}</div>
+              <h3 className="text-xl font-black text-dark mb-6 leading-tight flex-grow italic">{study.title}</h3>
+              <div className="space-y-3 pt-6 border-t border-gray-100">
+                {study.results.slice(0, 2).map((res, i) => (
+                  <div key={i} className="flex items-center text-[13px] font-bold text-gray-500">
+                    <span className="text-primary mr-3 text-lg font-black italic">!</span> {res}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 pt-6 border-t border-gray-100 flex items-center justify-between">
+                <span className="text-[11px] font-black text-gray-300 uppercase tracking-widest">ORG: {study.client}</span>
+                <div className="w-8 h-8 bg-pale rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all cursor-pointer">
+                  <ChevronDown size={14} className="transform -rotate-90" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="team" title="Nuestros Expertos" subtitle="Lideramos con rigor académico y experiencia en campo." className="bg-pale font-display">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           {TEAM.map((member, idx) => (
-            <div key={idx} className="bg-white rounded-lg overflow-hidden shadow-md group">
-              <div className="h-64 overflow-hidden">
+            <div key={idx} className="bg-white rounded-[3rem] overflow-hidden shadow-premium group hover:shadow-2xl transition-all duration-500 animate-zoom-in">
+              <div className="relative h-72 overflow-hidden">
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
               </div>
-              <div className="p-6 text-center">
-                <h3 className="font-bold text-lg text-dark">{member.name}</h3>
-                <p className="text-sm text-secondary font-medium mb-3">{member.role}</p>
-                <p className="text-xs text-gray-500">{member.bio[0]}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="clients" className="py-12 bg-white">
-        <p className="text-center text-gray-400 text-sm uppercase tracking-widest mb-8">Confían en nosotros</p>
-        <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-          <div className="font-bold text-2xl text-gray-400">Fe y Alegría</div>
-          <div className="font-bold text-2xl text-gray-400">SJRM</div>
-          <div className="font-bold text-2xl text-gray-400">UAC-CP</div>
-          <div className="font-bold text-2xl text-gray-400">Red CORAJE</div>
-        </div>
-      </Section>
-
-      <Section id="faq" title="Preguntas Frecuentes">
-        <div className="max-w-3xl mx-auto space-y-4">
-          {FAQS.map((faq, idx) => (
-            <div key={idx} className="border rounded-lg overflow-hidden">
-              <button
-                className="w-full flex justify-between items-center p-5 text-left bg-white hover:bg-gray-50 focus:outline-none"
-                onClick={() => toggleFaq(idx)}
-              >
-                <span className="font-medium text-dark">{faq.question}</span>
-                {openFaq === idx ? <ChevronUp size={20} className="text-gray-400" /> : <ChevronDown size={20} className="text-gray-400" />}
-              </button>
-              {openFaq === idx && (
-                <div className="p-5 bg-gray-50 text-gray-600 text-sm border-t">
-                  {faq.answer}
+              <div className="p-10 text-center relative">
+                <h3 className="font-black text-xl text-dark tracking-tighter mb-2 italic">{member.name}</h3>
+                <p className="text-sm text-secondary font-black uppercase tracking-widest mb-6">{member.role}</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {member.bio.slice(0, 2).map((b, i) => (
+                    <span key={i} className="text-[10px] bg-gray-50 text-gray-400 px-3 py-1.5 rounded-full font-black uppercase tracking-widest border border-gray-100">{b}</span>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section id="contact" title="Hablemos de tu Impacto" className="bg-primary" dark>
-        <div className="grid md:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <h3 className="text-2xl font-bold text-white">¿Listo para transformar tu organización?</h3>
-            <p className="text-gray-300">
-              La forma más rápida de empezar es hablando con <strong>Victoria</strong>, nuestra asistente virtual.
-              Ella puede agendar tu consulta gratuita en 2 minutos.
+      <Section id="contact" title="Hablemos de Impacto" className="bg-primary/95 shadow-inner-premium backdrop-blur-sm" dark>
+        <div className="grid lg:grid-cols-2 gap-20">
+          <div className="space-y-10 animate-fade-in-up">
+            <h3 className="text-4xl font-black text-white italic tracking-tighter">¿Listo para escalar tu propósito?</h3>
+            <p className="text-white/60 text-lg font-medium leading-relaxed max-w-lg">
+              Agenda una sesión estratégica de 30 minutos sin costo con nuestro equipo.
+              Descubre cómo podemos sistematizar tu éxito social.
             </p>
-            <div className="space-y-4">
-              <div className="flex items-center text-gray-200">
-                <Mail className="mr-4 text-accent" />
-                contacto@conectaconsultores.com
-              </div>
-              <div className="flex items-center text-gray-200">
-                <Phone className="mr-4 text-accent" />
-                +591 707 12345
-              </div>
-              <div className="flex items-center text-gray-200">
-                <MapPin className="mr-4 text-accent" />
-                Cochabamba & La Paz, Bolivia
-              </div>
-            </div>
-
-            <div className="pt-8 flex space-x-4">
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-white/20 transition-colors"><Linkedin size={20} /></a>
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-white/20 transition-colors"><Facebook size={20} /></a>
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-white/20 transition-colors"><Youtube size={20} /></a>
+            <div className="space-y-6">
+              {[
+                { icon: <Mail />, text: "contacto@conectaconsultores.com" },
+                { icon: <Phone />, text: "+591 707 12345" },
+                { icon: <MapPin />, text: "Cochabamba & La Paz, Bolivia" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center text-white/80 group">
+                  <div className="mr-6 text-accent bg-white/5 p-4 rounded-2xl group-hover:bg-accent group-hover:text-white transition-all">
+                    {item.icon}
+                  </div>
+                  <span className="font-bold text-lg">{item.text}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 shadow-2xl text-dark">
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
-                <input type="text" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="Tu nombre" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email Institucional</label>
-                <input type="email" className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="nombre@organizacion.org" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">¿Qué necesitas?</label>
-                <select className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none bg-white">
-                  <option>Diagnóstico Organizacional HPO</option>
-                  <option>Evaluación de Impacto</option>
-                  <option>Diseño de Proyectos</option>
-                  <option>Otro</option>
+          <div className="bg-white/5 backdrop-blur-xl rounded-[3.5rem] p-12 border border-white/10 shadow-2xl animate-zoom-in">
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <div className="space-y-6">
+                <input type="text" className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl px-6 font-bold text-white outline-none focus:ring-4 ring-accent/20 placeholder:text-white/20 transition-all shadow-inner-premium" placeholder="Nombre completo" />
+                <input type="email" className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl px-6 font-bold text-white outline-none focus:ring-4 ring-accent/20 placeholder:text-white/20 transition-all shadow-inner-premium" placeholder="Email institucional" />
+                <select className="w-full h-16 bg-white/5 border border-white/10 rounded-2xl px-6 font-bold text-white outline-none focus:ring-4 ring-accent/20 transition-all shadow-inner-premium appearance-none">
+                  <option className="bg-dark">Diagnóstico HPO</option>
+                  <option className="bg-dark">Evaluación de Impacto</option>
+                  <option className="bg-dark">Estrategia Social</option>
                 </select>
               </div>
-              <button className="w-full bg-secondary text-white font-bold py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg mt-2">
-                Enviar Mensaje
+              <button className="w-full h-20 bg-accent text-white font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-accent/20 text-lg italic">
+                Iniciar Transformación
               </button>
             </form>
           </div>
         </div>
       </Section>
 
-      <footer className="bg-gray-900 text-gray-400 py-12 px-6 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm">
-          <div className="mb-4 md:mb-0">
-            <div className="mb-4">
-              {!logoError ? (
-                <img
-                  src="/conecta-logo.png"
-                  alt="CONECTA"
-                  className="h-10 w-auto object-contain brightness-0 invert opacity-80"
-                  onError={() => setLogoError(true)}
-                />
-              ) : (
-                <span className="text-2xl font-bold text-white tracking-tighter block">CONECTA</span>
-              )}
+      <footer className="bg-dark text-white/30 py-20 px-6 border-t border-white/5 font-display">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-10">
+            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+              <div className="mb-6 h-12">
+                {!logoError ? (
+                  <img src="/conecta-logo.png" alt="CONECTA" className="h-full w-auto opacity-30 grayscale brightness-200" />
+                ) : (
+                  <span className="text-3xl font-black text-white/20 tracking-tighter">CONECTA</span>
+                )}
+              </div>
+              <p className="max-w-sm font-bold italic tracking-tighter leading-tight">Transformando el ADN de las organizaciones sociales desde 2004.</p>
             </div>
-            <div className="flex items-center">
-              <p>Transformando organizaciones sociales desde 2004.</p>
-              <button
-                onClick={() => setView('login')}
-                className="opacity-20 hover:opacity-100 hover:text-primary transition-all ml-4 text-white"
-                title="Acceso Admin"
-              >
-                <Lock size={14} />
-              </button>
+            <div className="flex flex-wrap justify-center gap-10 font-black uppercase tracking-[0.3em] text-[10px]">
+              <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+              <a href="#" className="hover:text-white transition-colors">Facebook</a>
+              <a href="#" className="hover:text-white transition-colors">YouTube</a>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-8 text-center md:text-right">
-            <a href="#" className="hover:text-white transition-colors">Política de Privacidad</a>
-            <a href="#" className="hover:text-white transition-colors">Términos de Servicio</a>
-            <span className="opacity-80">© 2024 CONECTA Consultores.</span>
+          <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-black uppercase tracking-widest gap-4">
+            <div className="flex items-center gap-6">
+              <div className="flex gap-8">
+                <a href="#" className="hover:text-white transition-colors">Privacidad</a>
+                <a href="#" className="hover:text-white transition-colors">Términos</a>
+              </div>
+              <button
+                onClick={() => setView('login')}
+                className="flex items-center gap-2 text-white/10 hover:text-white/50 transition-all cursor-pointer group"
+              >
+                <Lock size={12} className="opacity-50 group-hover:opacity-100" />
+                <span className="text-[10px] font-black uppercase tracking-widest bg-white/5 px-2 py-1 rounded">Admin</span>
+              </button>
+            </div>
+            <p>© 2026 CONECTA Consultores en Impacto Social. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

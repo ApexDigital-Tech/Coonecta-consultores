@@ -45,6 +45,7 @@ export interface AppointmentData {
   email: string;
   organization: string;
   needType: string;
+  topic: string;
   preferredDateTime: string;
   consultant: string;
   notes: string;
